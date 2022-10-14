@@ -1,11 +1,24 @@
 import fetch from "node-fetch";
 
-async function GetData() {
+// Calculate the best emission data by list of locations for a specified time period.
+async function BestEmissionData(locations, fromTime, toTime) {
+  if (locations.length === 0) {
+    return [];
+  }
+  const baseUri = "https://carbon-aware-api.azurewebsites.net";
+  const locationsQuery = locations
+    .map((location) => `location=${location}`)
+    .join("&");
   const res = await fetch(
-    "https://carbon-aware-api.azurewebsites.net/emissions/bylocations/best?location=eastus&location=westus&time=2022-03-01T15%3A30%3A00Z&toTime=2022-03-01T18%3A30%3A00Z"
+    `${baseUri}/emissions/bylocations/best?${locationsQuery}&time=${fromTime}&toTime=${toTime}`
   );
-  const data = await res.json();
-  console.log(data);
+  return await res.json();
 }
 
-await GetData();
+const res = await BestEmissionData(
+  ["eastus", "westus"],
+  "2022-03-01T15:30:00Z",
+  "2022-03-01T18:30:00Z"
+);
+
+console.log(res);
