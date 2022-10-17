@@ -1,10 +1,12 @@
 import { Link, routes } from '@redwoodjs/router'
+import { useAuth } from '@redwoodjs/auth'
 
 type DefaultLayoutProps = {
   children?: React.ReactNode
 }
 
 const DefaultLayout = ({ children }: DefaultLayoutProps) => {
+  const { isAuthenticated } = useAuth()
   return (
     <>
       <header>
@@ -19,6 +21,15 @@ const DefaultLayout = ({ children }: DefaultLayoutProps) => {
             <li>
               <Link to={routes.about()}>About</Link>
             </li>
+            {isAuthenticated ? (
+              <li>
+                <Link to={routes.webhooks()}>Webhooks</Link>
+              </li>
+            ) : (
+              <li>
+                <Link to={routes.login()}>Login</Link>
+              </li>
+            )}
           </ul>
         </nav>
       </header>
