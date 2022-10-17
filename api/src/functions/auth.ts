@@ -4,12 +4,13 @@ import { DbAuthHandler } from '@redwoodjs/api'
 import type { DbAuthHandlerOptions } from '@redwoodjs/api'
 
 import { db } from 'src/lib/db'
+import { sendEmail } from 'src/lib/email'
+import { createAudit } from 'src/services/audits/audits'
 
 export const handler = async (
   event: APIGatewayProxyEvent,
   context: Context
 ) => {
-
   const forgotPasswordOptions: DbAuthHandlerOptions['forgotPassword'] = {
     // handler() is invoked after verifying that a user was found with the given
     // username. This is where you can send the user an email with a link to
@@ -23,8 +24,33 @@ export const handler = async (
     // You could use this return value to, for example, show the email
     // address in a toast message so the user will know it worked and where
     // to look for the email.
-    handler: (user) => {
-      return user
+    handler: async (user) => {
+      const res = await sendEmail({
+        to: user.email,
+        subject: 'Reset your password',
+        text: `You can reset your password by clicking here: https://localhost:8910/reset-password?resetToken=${user.resetToken}`,
+        html: `
+        <p>Click the link below to reset your password.</p>
+        <a href="https://localhost:8910/reset-password?resetToken=${user.resetToken}">Reset your password</a>
+      `,
+      })
+      if (res && res.accepted) {
+        await createAudit({
+          input: {
+            user: { connect: { id: user.id } },
+            log: 'Reset password email sent',
+          },
+        })
+        return user
+      } else {
+        await createAudit({
+          input: {
+            user: { connect: { id: user.id } },
+            log: 'Reset password email failed',
+          },
+        })
+        return { error: 'Error sending email. Please try again or contact us.' }
+      }
     },
 
     // How long the resetToken is valid for, in seconds (default is 24 hours)

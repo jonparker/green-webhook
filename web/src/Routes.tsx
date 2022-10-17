@@ -15,6 +15,20 @@ import DefaultLayout from './layouts/DefaultLayout/DefaultLayout'
 const Routes = () => {
   return (
     <Router>
+      <Private unauthenticated="home" roles={['admin']}>
+        <Set wrap={ScaffoldLayout} title="Users" titleTo="users" buttonLabel="New User" buttonTo="newUser">
+          <Route path="/users/new" page={UserNewUserPage} name="newUser" />
+          <Route path="/users/{id}/edit" page={UserEditUserPage} name="editUser" />
+          <Route path="/users/{id}" page={UserUserPage} name="user" />
+          <Route path="/users" page={UserUsersPage} name="users" />
+        </Set>
+      </Private>
+      <Set wrap={ScaffoldLayout} title="Audits" titleTo="audits" buttonLabel="New Audit" buttonTo="newAudit">
+        <Route path="/audits/new" page={AuditNewAuditPage} name="newAudit" />
+        <Route path="/audits/{id}/edit" page={AuditEditAuditPage} name="editAudit" />
+        <Route path="/audits/{id}" page={AuditAuditPage} name="audit" />
+        <Route path="/audits" page={AuditAuditsPage} name="audits" />
+      </Set>
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/signup" page={SignupPage} name="signup" />
       <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />

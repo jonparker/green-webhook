@@ -17,7 +17,7 @@ const ScaffoldLayout = ({
   buttonTo,
   children,
 }: LayoutProps) => {
-  const { isAuthenticated, logOut } = useAuth()
+  const { isAuthenticated, logOut, hasRole } = useAuth()
   return (
     <div className="rw-scaffold">
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
@@ -41,6 +41,11 @@ const ScaffoldLayout = ({
                 <li>
                   <Link to={routes.webhooks()}>Webhooks</Link>
                 </li>
+                {hasRole('admin') && (
+                  <li>
+                    <Link to={routes.users()}>Admin</Link>
+                  </li>
+                )}
                 <li>
                   <a href="#" onClick={logOut}>
                     Logout

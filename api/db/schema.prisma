@@ -15,7 +15,7 @@ model Webhook {
   alias  String?
   createdAt DateTime @default(now())
   createdBy String
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
   destinationEndpoints String
   invocationUri String
   maxDelaySeconds Int?
@@ -34,4 +34,14 @@ model User {
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
+  audits    Audit[]
+}
+
+model Audit {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  log       String
 }
