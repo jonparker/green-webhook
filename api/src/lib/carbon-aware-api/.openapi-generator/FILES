@@ -1,0 +1,14 @@
+.gitignore
+.openapi-generator-ignore
+api.ts
+api/apis.ts
+api/carbonAwareApi.ts
+git_push.sh
+model/carbonIntensityBatchParametersDTO.ts
+model/carbonIntensityDTO.ts
+model/emissionsData.ts
+model/emissionsDataDTO.ts
+model/emissionsForecastBatchParametersDTO.ts
+model/emissionsForecastDTO.ts
+model/models.ts
+model/validationProblemDetails.ts
