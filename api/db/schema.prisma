@@ -1,0 +1,47 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = "native"
+}
+
+// Define your own datamodels here and run `yarn redwood prisma migrate dev`
+// to create migrations for them and apply to your dev DB.
+model Webhook {
+  id String @id @default(cuid())
+  alias  String?
+  createdAt DateTime @default(now())
+  createdBy String
+  updatedAt DateTime @default(now()) @updatedAt
+  destinationEndpoints String
+  invocationUri String
+  maxDelaySeconds Int?
+  startAt DateTime?
+  invocations Int
+  isEnabled Boolean
+  isArchived Boolean
+  isDeleted Boolean
+}
+
+model User {
+  id                  String @id @default(cuid())
+  name                String?
+  email               String    @unique
+  hashedPassword      String
+  salt                String
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  audits    Audit[]
+}
+
+model Audit {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  log       String
+}
