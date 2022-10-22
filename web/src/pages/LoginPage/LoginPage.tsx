@@ -13,6 +13,7 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+import DefaultLayout from 'src/layouts/DefaultLayout/DefaultLayout'
 
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
@@ -43,8 +44,7 @@ const LoginPage = () => {
   return (
     <>
       <MetaTags title="Login" />
-
-      <main className="rw-main">
+      <DefaultLayout>
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
@@ -122,7 +122,7 @@ const LoginPage = () => {
             </Link>
           </div>
         </div>
-      </main>
+      </DefaultLayout>
     </>
   )
 }
