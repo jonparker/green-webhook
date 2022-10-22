@@ -12,7 +12,6 @@ import {
   DatetimeLocalField,
   CheckboxField,
   Submit,
-  SelectField,
 } from '@redwoodjs/forms'
 import type { RWGqlError } from '@redwoodjs/forms'
 
@@ -32,25 +31,65 @@ interface WebhookFormProps {
 }
 
 const WebhookForm = (props: WebhookFormProps) => {
-  const containsLocation = props.webhook?.destinationEndpoints?.includes('|')
-  const [location, setLocation] = useState(
-    containsLocation
-      ? props.webhook?.destinationEndpoints.split('|').pop()
+  const destinationLocationOptions = ['na', 'westus', 'eastus']
+
+  const destinationEndpoints = props.webhook?.destinationEndpoints
+
+  const destinationEndpointList = destinationEndpoints?.split(',')
+
+  const [firstDestinationEndpoint, setFirstDestinationEndpoint] = useState(
+    destinationEndpointList[0]?.split('|')[0]
+  )
+
+  const secondDestinationEndpointWithLocation =
+    destinationEndpointList.length > 1 ? destinationEndpointList[1] : null
+  const [secondDestinationEndpoint, setSecondDestinationEndpoint] = useState(
+    secondDestinationEndpointWithLocation
+      ? secondDestinationEndpointWithLocation.split('|')[0]
+      : ''
+  )
+
+  const firstEndpointContainsLocation = destinationEndpoints
+    .split(',')
+    ?.pop()
+    ?.includes('|')
+
+  const [firstLocation, setFirstLocation] = useState(
+    firstEndpointContainsLocation
+      ? destinationEndpointList[0]?.split('|').pop()
+      : 'na'
+  )
+
+  const secondEndpointContainsLocation = destinationEndpoints
+    .split(',')
+    ?.pop()
+    ?.includes('|')
+
+  const [secondLocation, setSecondLocation] = useState(
+    secondEndpointContainsLocation
+      ? destinationEndpointList[1]?.split('|').pop()
       : 'na'
   )
   const onSubmit = (data: FormWebhook) => {
+    const calculatedDestinationEndpoints = `${firstDestinationEndpoint}|${firstLocation},${secondDestinationEndpoint}|${secondLocation}`
+    console.log('Final value:', calculatedDestinationEndpoints)
     props.onSave(
       {
         ...data,
-        destinationEndpoints: `${data.destinationEndpoints}|${location}`,
+        destinationEndpoints: calculatedDestinationEndpoints,
       },
       props?.webhook?.id
     )
   }
 
-  const updateDestinationLocation = (value) => {
+  const updateFirstDestinationLocation = (value) => {
     console.log(value.target.value)
-    setLocation(value.target.value)
+    setFirstLocation(value.target.value)
+  }
+
+  const updateSecondDestinationLocation = (value) => {
+    console.log(value.target.value)
+    setSecondLocation(value.target.value)
   }
 
   return (
@@ -103,28 +142,57 @@ const WebhookForm = (props: WebhookFormProps) => {
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          Destination endpoint:
+          1st Destination endpoint:
         </Label>
 
-        <TextField
-          name="destinationEndpoints"
-          defaultValue={props.webhook?.destinationEndpoints.split('|')[0]}
+        <input
+          type="text"
+          name="firstDestination"
+          value={firstDestinationEndpoint}
           className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
+          onChange={(e) => setFirstDestinationEndpoint(e.target.value)}
         />
 
         <Label name="destinationLocation" className="rw-label">
-          Destination endpoint location:
+          1st Destination endpoint location:
         </Label>
         <select
-          defaultValue={location}
+          defaultValue={firstLocation}
           multiple={false}
-          onChange={updateDestinationLocation}
+          onChange={updateFirstDestinationLocation}
         >
-          <option>na</option>
-          <option>eastus</option>
-          <option>westus</option>
+          {destinationLocationOptions.map((option) => (
+            <option key={option}>{option}</option>
+          ))}
+        </select>
+
+        <Label
+          name="destinationEndpoints"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          2nd Destination endpoint:
+        </Label>
+
+        <input
+          type="text"
+          name="secondDestination"
+          value={secondDestinationEndpoint}
+          className="rw-input"
+          onChange={(e) => setSecondDestinationEndpoint(e.target.value)}
+        />
+
+        <Label name="destinationLocation" className="rw-label">
+          2nd Destination endpoint location:
+        </Label>
+        <select
+          defaultValue={secondLocation}
+          multiple={false}
+          onChange={updateSecondDestinationLocation}
+        >
+          {destinationLocationOptions.map((option) => (
+            <option key={option}>{option}</option>
+          ))}
         </select>
 
         <FieldError name="destinationEndpoints" className="rw-field-error" />
