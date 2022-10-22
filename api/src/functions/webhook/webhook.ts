@@ -1,5 +1,6 @@
 import type { APIGatewayEvent, Context } from 'aws-lambda'
 
+import { CarbonAwareApi } from 'src/lib/carbon-aware-api/api'
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 import { forwardWebhook } from 'src/services/forwardWebhook/forwardWebhook'
@@ -48,26 +49,79 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
     ) {
       return invalidWebhookId()
     }
-    // 3. If found then location call Carbon Aware API with locations/time information from webhook.
+    // 3. If found then call Carbon Aware API with locations/time information from webhook.
     // 4. Calculate which endpoint to call or how long to delay calling the endpoint.
     // 5. Call the endpoint with the payload or schedule a delayed call.
     if (event.httpMethod === 'POST' || event.httpMethod === 'GET') {
-      const endpointResponse = await forwardWebhook({
-        httpMethod: event.httpMethod,
-        payload: event.body,
-        endpoint: webhook.destinationEndpoints,
-      })
-      logger.info(`Endpoint response`, endpointResponse)
-      // 6. Update invocations count on webhook.
-      await db.webhook.update({
-        where: { id: webhookId },
-        data: {
-          invocations: {
-            increment: 1,
-          },
-        },
-      })
-      return successfulResponse(endpointResponse)
+      const endpoints = webhook.destinationEndpoints.split(',')
+      const baseUri = process.env.CARBON_AWARE_API_BASE_URI
+      if (!baseUri) {
+        throw new Error(
+          "Missing 'CARBON_AWARE_API_BASE_URI' environment variable"
+        )
+      }
+      const api = new CarbonAwareApi(baseUri)
+
+      let bestEndpoint = null
+
+      if (webhook.maxDelaySeconds > 0 && endpoints.length === 1) {
+        // Check Carbon Aware SDK for best time within maxDelaySeconds to call endpoint.
+      } else {
+        // Check Carbon Aware SDK for best location
+        const locations = endpoints.map((e) => e.split('|')[1])
+        console.log('Got locations', locations)
+        const response = await api.getBestEmissionsDataForLocationsByTime(
+          locations
+        )
+
+        const bestLocationBalancingAuthority = response.body[0].location
+
+        for (const location of locations) {
+          const responseForSingleLocation =
+            await api.getEmissionsDataForLocationByTime(location)
+          if (
+            responseForSingleLocation.body[0].location ===
+            bestLocationBalancingAuthority
+          ) {
+            const foundBestEndpoint = endpoints
+              .map((e) => ({
+                endpoint: e.split('|')[0],
+                location: e.split('|')[1],
+              }))
+              .find((l) => l.location === location)
+
+            if (foundBestEndpoint) {
+              console.log('Best endpoint is', foundBestEndpoint)
+              bestEndpoint = foundBestEndpoint.endpoint
+            }
+          }
+        }
+      }
+
+      if (bestEndpoint !== null) {
+        const endpointResponse = await forwardWebhook({
+          httpMethod: event.httpMethod,
+          payload: event.body,
+          endpoint: bestEndpoint,
+        })
+        logger.info(`Endpoint response`, endpointResponse)
+
+        if (endpointResponse.statusCode === 200) {
+          // 6. Update invocations count on webhook.
+          await db.webhook.update({
+            where: { id: webhookId },
+            data: {
+              invocations: {
+                increment: 1,
+              },
+            },
+          })
+        }
+
+        return successfulResponse(endpointResponse)
+      } else {
+        return invalidWebhookId()
+      }
     }
     return invalidWebhookId()
   }
