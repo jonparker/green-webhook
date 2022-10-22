@@ -1,11 +1,14 @@
+import type {
+  DeleteWebhookMutationVariables,
+  FindWebhooks,
+} from 'types/graphql'
+
 import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/Webhook/WebhooksCell'
 import { checkboxInputTag, timeTag, truncate } from 'src/lib/formatters'
-
-import type { DeleteWebhookMutationVariables, FindWebhooks } from 'types/graphql'
 
 const DELETE_WEBHOOK_MUTATION = gql`
   mutation DeleteWebhookMutation($id: String!) {
@@ -66,7 +69,15 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
               <td>{truncate(webhook.createdBy)}</td>
               <td>{timeTag(webhook.updatedAt)}</td>
               <td>{truncate(webhook.destinationEndpoints)}</td>
-              <td>{truncate(webhook.invocationUri)}</td>
+              <td>
+                <a
+                  href={`${document.location.protocol}/\/${document.location.hostname}:${document.location.port}/.netlify/functions/webhook/${webhook.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Invocation URI
+                </a>
+              </td>
               <td>{truncate(webhook.maxDelaySeconds)}</td>
               <td>{timeTag(webhook.startAt)}</td>
               <td>{truncate(webhook.invocations)}</td>

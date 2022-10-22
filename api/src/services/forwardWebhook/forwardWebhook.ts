@@ -1,18 +1,38 @@
 import got from 'got'
 
-export const forwardWebhook = async ({ payload, endpoint, secret }) => {
-  try {
-    console.log(`Calling ${endpoint}`)
+import { logger } from 'src/lib/logger'
 
-    const forwardResponse = await got.post(endpoint, {
-      responseType: 'json',
-      headers: {
-        'X-Green-Webhook-Signature': secret,
-      },
-      json: {
-        payload,
-      },
-    })
+export const forwardWebhook = async ({
+  payload,
+  endpoint,
+  httpMethod,
+  secret,
+}: {
+  payload: string
+  endpoint: string
+  httpMethod: string
+  secret?: string
+}) => {
+  try {
+    logger.info(`Calling ${endpoint} with method ${httpMethod}`)
+
+    const forwardResponse =
+      httpMethod === 'POST'
+        ? await got.post(endpoint, {
+            responseType: 'json',
+            headers: {
+              'X-Green-Webhook-Signature': secret,
+            },
+            json: {
+              payload,
+            },
+          })
+        : await got.get(endpoint, {
+            responseType: 'json',
+            headers: {
+              'X-Green-Webhook-Signature': secret,
+            },
+          })
 
     return {
       statusCode: 200,
