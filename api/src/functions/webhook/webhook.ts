@@ -25,7 +25,11 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
   logger.info('Invoked webhook function')
 
   // Example URI: http://localhost:8910/.netlify/functions/webhook/123098234ljasdf
-  if (event.path.startsWith('/webhook/')) {
+  // Example on Netlify: https://greenwebhook.netlify.app/.netlify/functions/webhook/cl9jxx4mv0017d2t7muyt1ka4
+  if (
+    event.path.startsWith('/webhook/') ||
+    event.path.startsWith('/.netlify/functions/webhook/')
+  ) {
     // TODO:
     // 1. Check the signature (OPTIONAL)
     // 2. Get webhook ID from path and find webhook in database.
