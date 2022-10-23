@@ -10,7 +10,7 @@ const Navigation = () => {
   return (
     <nav>
         <ul className='flex flex-col items-center justify-center w-full mt-12 md:p-10 md:flex-row md:gap-14 bg-green'>
-          <Link to={routes.home()} className="">
+          <Link to={routes.home()}>
             <ListItem>Home</ListItem>
           </Link>
           <Link to={routes.about()}>
