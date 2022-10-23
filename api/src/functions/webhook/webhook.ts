@@ -37,7 +37,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
     // 2. Get webhook ID from path and find webhook in database.
     const webhookId = event.path
       .replace('/webhook/', '')
-      .replace('/.netlify/functions/', '')
+      .replace('/.netlify/functions', '')
     if (webhookId.includes('/')) {
       logger.info('Invalid webhook id', webhookId)
       return invalidWebhookId()
