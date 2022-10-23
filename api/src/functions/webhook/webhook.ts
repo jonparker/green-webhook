@@ -27,6 +27,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
 
   // Example URI: http://localhost:8910/.netlify/functions/webhook/123098234ljasdf
   // Example on Netlify: https://greenwebhook.netlify.app/.netlify/functions/webhook/cl9jxx4mv0017d2t7muyt1ka4
+
   if (
     event.path.startsWith('/webhook/') ||
     event.path.startsWith('/.netlify/functions/webhook/')
@@ -34,7 +35,9 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
     // TODO:
     // 1. Check the signature (OPTIONAL)
     // 2. Get webhook ID from path and find webhook in database.
-    const webhookId = event.path.replace('/webhook/', '')
+    const webhookId = event.path
+      .replace('/webhook/', '')
+      .replace('/.netlify/functions/', '')
     if (webhookId.includes('/')) {
       logger.info('Invalid webhook id', webhookId)
       return invalidWebhookId()
