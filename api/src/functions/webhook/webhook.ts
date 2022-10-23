@@ -23,6 +23,7 @@ import { forwardWebhook } from 'src/services/forwardWebhook/forwardWebhook'
  */
 export const handler = async (event: APIGatewayEvent, context: Context) => {
   logger.info('Invoked webhook function')
+  logger.info(JSON.stringify(event))
 
   // Example URI: http://localhost:8910/.netlify/functions/webhook/123098234ljasdf
   // Example on Netlify: https://greenwebhook.netlify.app/.netlify/functions/webhook/cl9jxx4mv0017d2t7muyt1ka4
