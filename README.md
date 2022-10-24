@@ -1,22 +1,20 @@
 # README
 
-Welcome to [RedwoodJS](https://redwoodjs.com)!
+💚 Welcome to [Green Webhook](https://greenwebhook.netlify.app/)! 💚
+
+Green Webhook is a proxy or gateway between two systems that intelligently chooses which endpoint to send a webhook event to in order to location shift compute workloads to the endpoint with the lowest carbon intensity. It uses the [Carbon Aware SDK](https://github.com/Green-Software-Foundation/carbon-aware-sdk) to check the impact of an increased demand on the electricity grid for the relevant locations.
+
+By deploying your workload to multiple regions and configuring each endpoint along with its location within a Green Webhook you can reduce the carbon emissions caused by your workload.
 
 > **Prerequisites**
 >
-> - Redwood requires [Node.js](https://nodejs.org/en/) (>=14.19.x <=16.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
+> - Green Webhook is build with Redwood and requires [Node.js](https://nodejs.org/en/) (>=14.19.x <=16.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
 > - Are you on Windows? For best results, follow our [Windows development setup](https://redwoodjs.com/docs/how-to/windows-development-setup) guide
 
 Start by installing dependencies:
 
 ```
 yarn install
-```
-
-Then change into that directory and start the development server:
-
-```
-cd my-redwood-project
 yarn redwood dev
 ```
 
