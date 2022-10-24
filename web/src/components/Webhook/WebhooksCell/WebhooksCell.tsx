@@ -29,7 +29,7 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => {
   return (
-    <div className="rw-text-center">
+    <div className="">
       {'No webhooks yet. '}
       <Link
         to={routes.newWebhook()}
