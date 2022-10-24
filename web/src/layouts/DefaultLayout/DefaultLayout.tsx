@@ -2,6 +2,8 @@ import Header from 'src/components/Header/Header'
 import Navigation from 'src/components/Navigation/Navigation'
 
 type DefaultLayoutProps = {
+  buttonLabel: string
+  buttonTo: string
   children?: React.ReactNode
 }
 
@@ -11,7 +13,7 @@ const DefaultLayout = ({ children }: DefaultLayoutProps) => {
     <>
       <Header />
       <Navigation />
-      <main className='flex items-center justify-center'>{children}</main>
+      <main className='flex items-center justify-center px-5'>{children}</main>
     </>
   )
 }

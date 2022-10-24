@@ -4,7 +4,12 @@ import React from 'react'
 import { Link, routes } from '@redwoodjs/router'
 import ListItem from '../ListItem/ListItem'
 
-const Navigation = () => {
+interface NavProps {
+  buttonLabel?: string
+  buttonTo?: string
+}
+
+const Navigation: React.FC<NavProps> = ({ buttonLabel, buttonTo }) => {
   const { isAuthenticated, hasRole, logOut } = useAuth()
 
   return (
@@ -29,13 +34,17 @@ const Navigation = () => {
                <a href="#" onClick={logOut}>
                <ListItem>Logout</ListItem>
               </a>
+              <Link to={buttonTo}>
+                <ListItem styles="bg-emerald-800 text-white">+ {buttonLabel}</ListItem>
+              </Link>
             </>
           ) : (
             <Link to={routes.login()}>
-              <ListItem>Login </ListItem>
+              <ListItem>Login</ListItem>
             </Link>
           )}
         </ul>
+
       </nav>
   )
 }
