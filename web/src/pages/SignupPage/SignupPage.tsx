@@ -47,72 +47,66 @@ const SignupPage = () => {
     <>
       <MetaTags title="Signup" />
       <DefaultLayout>
-          <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-          <div className="rw-scaffold rw-login-container">
-            <div className="rw-segment">
-              <header className="rw-segment-header">
-                <h2 className="rw-heading rw-heading-secondary">Signup</h2>
-              </header>
-              <div className="rw-segment-main">
-                <div className="rw-form-wrapper">
-                  <Form onSubmit={onSubmit} className="rw-form-wrapper">
-                    <Label
-                      name="username"
-                      className="rw-label"
-                      errorClassName="rw-label rw-label-error"
-                    >
-                      Email address
-                    </Label>
-                    <TextField
-                      name="username"
-                      className="rw-input"
-                      errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
-                      validation={{
-                        required: {
-                          value: true,
-                          message: 'Username is required',
-                        },
-                      }}
-                    />
-                    <FieldError name="username" className="rw-field-error" />
-
-                    <Label
-                      name="password"
-                      className="rw-label"
-                      errorClassName="rw-label rw-label-error"
-                    >
-                      Password
-                    </Label>
-                    <PasswordField
-                      name="password"
-                      className="rw-input"
-                      errorClassName="rw-input rw-input-error"
-                      autoComplete="current-password"
-                      validation={{
-                        required: {
-                          value: true,
-                          message: 'Password is required',
-                        },
-                      }}
-                    />
-                    <FieldError name="password" className="rw-field-error" />
-                    <div className="rw-button-group">
-                      <Submit className="rw-button rw-button-blue">
-                        Sign Up
-                      </Submit>
-                    </div>
-                  </Form>
-                </div>
+      <div className="w-full">
+        <div className="w-1/4 h-auto py-8 m-auto bg-gray-200 rounded-lg m-w-450 px-7">
+          <h2 className="text-4xl font-bold text-center text-gray-600">Create account</h2>
+          <div className="w-full mt-3 text-center">
+              <span className='text-base font-medium text-gray-500'>Already have an account?</span>{' '}
+              <Link to={routes.login()} className="rw-link">
+                Log in!
+              </Link>
+          </div>
+          <Form onSubmit={onSubmit}>
+              <Label
+                name="username"
+                className="rw-label"
+                errorClassName="rw-label rw-label-error"
+              >
+                Email address
+              </Label>
+              <TextField
+                name="username"
+                placeholder='Email address'
+                className="mt-2 w-full py-2.5 px-4 rounded-lg bg-gray-100 focus:shadow focus:bg-white focus:outline-none"
+                errorClassName="rw-input rw-input-error"
+                ref={usernameRef}
+                validation={{
+                  required: {
+                    value: true,
+                    message: 'An email address is required',
+                  },
+                }}
+              />
+              <FieldError name="username" className="rw-field-error" />
+              <Label
+                name="password"
+                className="rw-label"
+                errorClassName="rw-label rw-label-error"
+              >
+                Password
+              </Label>
+              <PasswordField
+                name="password"
+                placeholder='Password'
+                className="mt-2 w-full py-2.5 px-4 rounded-lg bg-gray-100 focus:shadow focus:bg-white focus:outline-none"
+                errorClassName="rw-input rw-input-error"
+                autoComplete="current-password"
+                validation={{
+                  required: {
+                    value: true,
+                    message: 'A password is required',
+                  },
+                }}
+              />
+              <FieldError name="password" className="rw-field-error" />
+              <div className="w-full mt-4">
+                <Submit className="w-full font-bold hover:text-bole hover:bg-white text-xl text-white bg-green py-2.5 rounded-lg">
+                  Sign up
+                </Submit>
               </div>
+            </Form>
+            </div>
           </div>
-          <div className="rw-login-link">
-            <span>Already have an account?</span>{' '}
-            <Link to={routes.login()} className="rw-link">
-              Log in!
-            </Link>
-          </div>
-        </div>
       </DefaultLayout>
     </>
   )
