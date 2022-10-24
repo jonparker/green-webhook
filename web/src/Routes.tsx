@@ -16,14 +16,14 @@ const Routes = () => {
   return (
     <Router>
       <Private unauthenticated="home" roles={['admin']}>
-        <Set wrap={ScaffoldLayout} title="Users" titleTo="users" buttonLabel="New User" buttonTo="newUser">
+        <Set wrap={ScaffoldLayout} buttonLabel="New User" buttonTo="newUser">
           <Route path="/users/new" page={UserNewUserPage} name="newUser" />
           <Route path="/users/{id}/edit" page={UserEditUserPage} name="editUser" />
           <Route path="/users/{id}" page={UserUserPage} name="user" />
           <Route path="/users" page={UserUsersPage} name="users" />
         </Set>
       </Private>
-      <Set wrap={ScaffoldLayout} title="Audits" titleTo="audits" buttonLabel="New Audit" buttonTo="newAudit">
+      <Set wrap={ScaffoldLayout} buttonLabel="New Audit" buttonTo="newAudit">
         <Route path="/audits/new" page={AuditNewAuditPage} name="newAudit" />
         <Route path="/audits/{id}/edit" page={AuditEditAuditPage} name="editAudit" />
         <Route path="/audits/{id}" page={AuditAuditPage} name="audit" />
@@ -34,14 +34,14 @@ const Routes = () => {
       <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
       <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
       <Private unauthenticated="home">
-        <Set wrap={ScaffoldLayout} title="Webhooks" titleTo="webhooks" buttonLabel="New Green Webhook" buttonTo="newWebhook">
+        <Set wrap={ScaffoldLayout} buttonLabel="Create Green Webhook" buttonTo="newWebhook">
           <Route path="/webhooks/new" page={WebhookNewWebhookPage} name="newWebhook" />
           <Route path="/webhooks/{id}/edit" page={WebhookEditWebhookPage} name="editWebhook" />
           <Route path="/webhooks/{id}" page={WebhookWebhookPage} name="webhook" />
           <Route path="/webhooks" page={WebhookWebhooksPage} name="webhooks" />
         </Set>
       </Private>
-      <Set wrap={DefaultLayout}>
+      <Set wrap={DefaultLayout} >
         <Route path="/about" page={AboutPage} name="about" />
         <Route path="/" page={HomePage} name="home" />
       </Set>
