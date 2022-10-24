@@ -11,7 +11,7 @@ import './index.css'
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+    <RedwoodProvider titleTemplate="Green Webhook | Intelligent IGO ">
       <AuthProvider type="dbAuth">
         <RedwoodApolloProvider>
           <Routes />
