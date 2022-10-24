@@ -1,22 +1,20 @@
 # README
 
-Welcome to [RedwoodJS](https://redwoodjs.com)!
+💚 Welcome to [Green Webhook](https://greenwebhook.netlify.app/)! 💚
+
+Green Webhook is a proxy or gateway between two systems that intelligently chooses which endpoint to send a webhook event to in order to location shift compute workloads to the endpoint with the lowest carbon intensity. It uses the [Carbon Aware SDK](https://github.com/Green-Software-Foundation/carbon-aware-sdk) to check the impact of an increased demand on the electricity grid for the relevant locations.
+
+By deploying your workload to multiple regions and configuring each endpoint along with its location within a Green Webhook you can reduce the carbon emissions caused by your workload.
 
 > **Prerequisites**
 >
-> - Redwood requires [Node.js](https://nodejs.org/en/) (>=14.19.x <=16.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
+> - Green Webhook is built with Redwood and requires [Node.js](https://nodejs.org/en/) (>=14.19.x <=16.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
 > - Are you on Windows? For best results, follow our [Windows development setup](https://redwoodjs.com/docs/how-to/windows-development-setup) guide
 
 Start by installing dependencies:
 
 ```
 yarn install
-```
-
-Then change into that directory and start the development server:
-
-```
-cd my-redwood-project
 yarn redwood dev
 ```
 
@@ -119,3 +117,27 @@ The best way to learn Redwood is by going through the comprehensive [tutorial](h
 
 - Stay updated: read [Forum announcements](https://community.redwoodjs.com/c/announcements/5), follow us on [Twitter](https://twitter.com/redwoodjs), and subscribe to the [newsletter](https://redwoodjs.com/newsletter)
 - [Learn how to contribute](https://redwoodjs.com/docs/contributing)
+
+# Examples
+
+## Create a webhook that runs code on your laptop via ngrok
+
+1. Create a NextJS app by running `npx create-next-app nextjs-blog --use-npm --example "https://github.com/vercel/next-learn/tree/master/basics/api-routes-starter"`
+2. Create `pages/api/user.js` with:
+
+```js
+export default function handler(req, res) {
+  res.status(200).json({ name: "John Doe" });
+}
+```
+3. In a terminal run `npm run dev`
+4. Install Ngrok from https://ngrok.com/
+5. In a terminal run `ngrok http 3000`
+6. Copy the URL output by Ngrok and add `/api/user` to the end
+7. Log in to https://greenwebhook.netlify.app and create a new webhook.
+8. Paste the URL from step 6 into the destination.
+9. Click Save
+10. Click on the `Invocation URI` link to trigger the webhook.
+11. Confirm that the response is `200` and contains JSON `{ name: "John Doe" }`
+
+Currently the Carbon Aware SDK only supports a limited list of locations but when more locations are supported then we will be able to allow you to put in the location where your computer or laptop is running in order to determine if it is the location with the lowest carbon intensity.
