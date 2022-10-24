@@ -2,8 +2,6 @@ import Header from 'src/components/Header/Header'
 import Navigation from 'src/components/Navigation/Navigation'
 
 type DefaultLayoutProps = {
-  buttonLabel: string
-  buttonTo: string
   children?: React.ReactNode
 }
 

@@ -14,7 +14,7 @@ const Navigation: React.FC<NavProps> = ({ buttonLabel, buttonTo }) => {
 
   return (
     <nav>
-        <ul className='flex flex-col items-center justify-center w-full mt-12 divide-y-2 border-y-2 md:p-10 md:flex-row md:gap-14 md:bg-green divide-green border-green'>
+        <ul className='flex flex-col items-center justify-center w-full mt-12 divide-y-2 border-y-2 md:p-10 lg:flex-row lg:gap-14 md:bg-green divide-green border-green'>
           <Link to={routes.home()}>
             <ListItem>Home</ListItem>
           </Link>
