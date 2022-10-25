@@ -30,45 +30,58 @@ interface WebhookFormProps {
   loading: boolean
 }
 
-const WebhookForm = (props: WebhookFormProps) => {
-  const destinationLocationOptions = ['na', 'westus', 'eastus']
+const getDestinationEndpoints = (webhook) => {
+  const destinationEndpoints = webhook?.destinationEndpoints
 
-  const destinationEndpoints = props.webhook?.destinationEndpoints
+  if (!destinationEndpoints) {
+    return {
+      firstDestinationEndpoint: {},
+      secondDestinationEndpoint: {},
+    }
+  }
 
   const destinationEndpointList = destinationEndpoints?.split(',')
 
+  if (destinationEndpointList.length === 1) {
+    return {
+      firstDestinationEndpoint: {
+        uri: destinationEndpointList[0]?.split('|')[0],
+        location: destinationEndpointList[0]?.split('|')[1],
+      },
+    }
+  }
+
+  return {
+    firstDestinationEndpoint: {
+      uri: destinationEndpointList[0]?.split('|')[0],
+      location: destinationEndpointList[0]?.split('|')[1],
+    },
+    secondDestinationEndpoint: {
+      uri: destinationEndpointList[1]?.split('|')[0],
+      location: destinationEndpointList[1]?.split('|')[1],
+    },
+  }
+}
+
+const WebhookForm = (props: WebhookFormProps) => {
+  const destinationLocationOptions = ['na', 'westus', 'eastus']
+
+  const destinationEndpointInfo = getDestinationEndpoints(props.webhook)
+
   const [firstDestinationEndpoint, setFirstDestinationEndpoint] = useState(
-    destinationEndpointList[0]?.split('|')[0]
+    destinationEndpointInfo.firstDestinationEndpoint?.uri || ''
   )
 
-  const secondDestinationEndpointWithLocation =
-    destinationEndpointList.length > 1 ? destinationEndpointList[1] : null
   const [secondDestinationEndpoint, setSecondDestinationEndpoint] = useState(
-    secondDestinationEndpointWithLocation
-      ? secondDestinationEndpointWithLocation.split('|')[0]
-      : ''
+    destinationEndpointInfo.secondDestinationEndpoint?.uri || ''
   )
-
-  const firstEndpointContainsLocation = destinationEndpoints
-    .split(',')
-    ?.pop()
-    ?.includes('|')
 
   const [firstLocation, setFirstLocation] = useState(
-    firstEndpointContainsLocation
-      ? destinationEndpointList[0]?.split('|').pop()
-      : 'na'
+    destinationEndpointInfo.firstDestinationEndpoint?.location || 'na'
   )
 
-  const secondEndpointContainsLocation = destinationEndpoints
-    .split(',')
-    ?.pop()
-    ?.includes('|')
-
   const [secondLocation, setSecondLocation] = useState(
-    secondEndpointContainsLocation
-      ? destinationEndpointList[1]?.split('|').pop()
-      : 'na'
+    destinationEndpointInfo.secondDestinationEndpoint?.location || 'na'
   )
   const onSubmit = (data: FormWebhook) => {
     const calculatedDestinationEndpoints = `${firstDestinationEndpoint}|${firstLocation},${secondDestinationEndpoint}|${secondLocation}`
