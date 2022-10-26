@@ -1,9 +1,12 @@
 import type { APIGatewayEvent, Context } from 'aws-lambda'
+import NodeCache from 'node-cache'
 
 import { CarbonAwareApi } from 'src/lib/carbon-aware-api/api'
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 import { forwardWebhook } from 'src/services/forwardWebhook/forwardWebhook'
+
+const cache = new NodeCache({ stdTTL: 60 })
 
 /**
  * The handler function is your code that processes http request events.
@@ -42,6 +45,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
       logger.info('Invalid webhook id', webhookId)
       return invalidWebhookId()
     }
+
     logger.info(`Looking in DB for webhook id`, webhookId)
     const webhook = await db.webhook.findUniqueOrThrow({
       where: { id: webhookId },
@@ -62,13 +66,6 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
     // 5. Call the endpoint with the payload or schedule a delayed call.
     if (event.httpMethod === 'POST' || event.httpMethod === 'GET') {
       const endpoints = webhook.destinationEndpoints.split(',')
-      const baseUri = process.env.CARBON_AWARE_API_BASE_URI
-      if (!baseUri) {
-        throw new Error(
-          "Missing 'CARBON_AWARE_API_BASE_URI' environment variable"
-        )
-      }
-      const api = new CarbonAwareApi(baseUri)
 
       let bestEndpoint = null
 
@@ -77,33 +74,15 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
       } else {
         // Check Carbon Aware SDK for best location
         const locations = endpoints.map((e) => e.split('|')[1])
-        console.log('Got locations', locations)
-        const response = await api.getBestEmissionsDataForLocationsByTime(
-          locations
-        )
-
-        const bestLocationBalancingAuthority = response.body[0].location
-
-        for (const location of locations) {
-          const responseForSingleLocation =
-            await api.getEmissionsDataForLocationByTime(location)
-          if (
-            responseForSingleLocation.body[0].location ===
-            bestLocationBalancingAuthority
-          ) {
-            const foundBestEndpoint = endpoints
-              .map((e) => ({
-                endpoint: e.split('|')[0],
-                location: e.split('|')[1],
-              }))
-              .find((l) => l.location === location)
-
-            if (foundBestEndpoint) {
-              console.log('Best endpoint is', foundBestEndpoint)
-              bestEndpoint = foundBestEndpoint.endpoint
-            }
-          }
-        }
+        const bestLocationInfo = await getLocationWithLowestEmissions(locations)
+        logger.info('Best endpoint is', bestLocationInfo)
+        const foundBestEndpoint = endpoints
+          .map((e) => ({
+            endpoint: e.split('|')[0],
+            location: e.split('|')[1],
+          }))
+          .find((l) => l.location === bestLocationInfo.location)
+        bestEndpoint = foundBestEndpoint.endpoint
       }
 
       if (bestEndpoint !== null) {
@@ -134,6 +113,47 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
     return invalidWebhookId()
   }
   return invalidWebhookId()
+}
+
+type LocationInfo = {
+  location: string
+  carbonAwareInfo: {
+    location?: string
+    time?: Date
+    rating?: number
+    duration?: string
+  }
+}
+
+const getLocationWithLowestEmissions = async (locations: string[]) => {
+  const locationInfo = new Array<LocationInfo>()
+  const baseUri = process.env.CARBON_AWARE_API_BASE_URI
+  if (!baseUri) {
+    throw new Error("Missing 'CARBON_AWARE_API_BASE_URI' environment variable")
+  }
+  const api = new CarbonAwareApi(baseUri)
+  for (const location of locations) {
+    if (cache.has(location) === true) {
+      console.log('Cache hit for location', location)
+      locationInfo.push(cache.get(location))
+    } else {
+      console.log('Cache miss for location', location)
+      const emissionsForLocation = await api.getEmissionsDataForLocationByTime(
+        location
+      )
+      locationInfo.push({
+        location,
+        carbonAwareInfo: emissionsForLocation.body[0],
+      })
+      cache.set(location, {
+        location,
+        carbonAwareInfo: emissionsForLocation.body[0],
+      })
+    }
+  }
+  return locationInfo.sort(
+    (a, b) => a.carbonAwareInfo.rating - b.carbonAwareInfo.rating
+  )[0]
 }
 
 const invalidWebhookId = () => {
