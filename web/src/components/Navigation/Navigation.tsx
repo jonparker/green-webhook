@@ -34,7 +34,7 @@ const Navigation: React.FC<NavProps> = ({ buttonLabel, buttonTo }) => {
               <a href="#" onClick={logOut}>
               <ListItem>Logout</ListItem>
             </a>
-            <Link to={buttonTo}>
+            <Link to={routes[`${buttonTo}`]()}>
               <ListItem styles="bg-emerald-800 text-white">+ {buttonLabel}</ListItem>
             </Link>
           </>
