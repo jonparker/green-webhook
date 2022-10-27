@@ -14,7 +14,8 @@ model Webhook {
   id String @id @default(cuid())
   alias  String?
   createdAt DateTime @default(now())
-  createdBy String
+  createdById String?
+  createdBy User? @relation(fields: [createdById], references: [id])
   updatedAt DateTime @default(now()) @updatedAt
   destinationEndpoints String
   invocationUri String
@@ -35,6 +36,7 @@ model User {
   resetToken          String?
   resetTokenExpiresAt DateTime?
   audits    Audit[]
+  webhooks Webhook[]
 }
 
 model Audit {

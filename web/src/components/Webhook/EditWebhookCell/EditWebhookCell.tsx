@@ -13,7 +13,7 @@ export const QUERY = gql`
       id
       alias
       createdAt
-      createdBy
+      createdById
       updatedAt
       destinationEndpoints
       invocationUri
@@ -32,7 +32,7 @@ const UPDATE_WEBHOOK_MUTATION = gql`
       id
       alias
       createdAt
-      createdBy
+      createdById
       updatedAt
       destinationEndpoints
       invocationUri
@@ -76,10 +76,17 @@ export const Success = ({ webhook }: CellSuccessProps<EditWebhookById>) => {
   return (
     <div className="rw-segment">
       <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">Edit Webhook {webhook?.id}</h2>
+        <h2 className="rw-heading rw-heading-secondary">
+          Edit Webhook {webhook?.id}
+        </h2>
       </header>
       <div className="rw-segment-main">
-        <WebhookForm webhook={webhook} onSave={onSave} error={error} loading={loading} />
+        <WebhookForm
+          webhook={webhook}
+          onSave={onSave}
+          error={error}
+          loading={loading}
+        />
       </div>
     </div>
   )

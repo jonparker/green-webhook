@@ -5,10 +5,9 @@ export const standard = defineScenario<Prisma.WebhookCreateArgs>({
   webhook: {
     one: {
       data: {
-        createdBy: 'String',
         destinationEndpoints: 'String',
         invocationUri: 'String',
-        invocations: 987321,
+        invocations: 3440027,
         isEnabled: true,
         isArchived: true,
         isDeleted: true,
@@ -16,10 +15,9 @@ export const standard = defineScenario<Prisma.WebhookCreateArgs>({
     },
     two: {
       data: {
-        createdBy: 'String',
         destinationEndpoints: 'String',
         invocationUri: 'String',
-        invocations: 8511714,
+        invocations: 3834000,
         isEnabled: true,
         isArchived: true,
         isDeleted: true,
