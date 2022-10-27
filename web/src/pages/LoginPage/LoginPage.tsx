@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useAuth } from '@redwoodjs/auth'
 import {
@@ -25,18 +25,22 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
+  const [pleaseWait, setPleaseWait] = useState(false)
+
   const usernameRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
     usernameRef.current?.focus()
   }, [])
 
   const onSubmit = async (data: Record<string, string>) => {
+    setPleaseWait(true)
     const response = await logIn({ ...data })
 
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
       toast.error(response.error)
+      setPleaseWait(false)
     } else {
       toast.success('Welcome back!')
     }
@@ -116,7 +120,7 @@ const LoginPage = () => {
 
               <div className="mt-4 w-full">
                 <Submit className="w-full rounded-lg bg-green py-2.5 text-xl font-bold text-white hover:bg-white hover:text-bole">
-                  Log in
+                  {pleaseWait === true ? 'Logging in...' : 'Log in'}
                 </Submit>
               </div>
             </Form>
