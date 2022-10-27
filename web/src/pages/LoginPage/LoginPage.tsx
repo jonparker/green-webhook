@@ -13,6 +13,7 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
 import DefaultLayout from 'src/layouts/DefaultLayout/DefaultLayout'
 
 const LoginPage = () => {
@@ -46,11 +47,15 @@ const LoginPage = () => {
       <MetaTags title="Login" />
       <DefaultLayout>
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-        <div className="w-full">
-          <div className="w-1/4 h-auto py-8 m-auto bg-gray-200 rounded-lg m-w-450 px-7">
-            <h2 className="text-4xl font-bold text-center text-gray-600">Log in</h2>
-            <div className="w-full mt-3 text-center">
-              <span className='text-base font-medium text-gray-500'>Don&apos;t have an account?</span>{' '}
+        <div className="w-full lg:w-1/4">
+          <div className="m-w-450 m-auto h-auto rounded-lg bg-gray-200 py-8 px-7">
+            <h2 className="text-center text-4xl font-bold text-gray-600">
+              Log in
+            </h2>
+            <div className="mt-3 w-full text-center">
+              <span className="text-base font-medium text-gray-500">
+                Don&apos;t have an account?
+              </span>{' '}
               <Link to={routes.signup()} className="rw-link">
                 Sign up!
               </Link>
@@ -65,8 +70,8 @@ const LoginPage = () => {
               </Label>
               <TextField
                 name="username"
-                placeholder='Email address'
-                className="mt-2 w-full py-2.5 px-4 rounded-lg bg-gray-100 focus:shadow focus:bg-white focus:outline-none"
+                placeholder="Email address"
+                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none"
                 errorClassName="rw-input rw-input-error"
                 ref={usernameRef}
                 validation={{
@@ -88,8 +93,8 @@ const LoginPage = () => {
               </Label>
               <PasswordField
                 name="password"
-                placeholder='Password'
-                className="mt-2 w-full py-2.5 px-4 rounded-lg bg-gray-100 focus:shadow focus:bg-white focus:outline-none"
+                placeholder="Password"
+                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none"
                 errorClassName="rw-input rw-input-error"
                 autoComplete="current-password"
                 validation={{
@@ -109,12 +114,12 @@ const LoginPage = () => {
                 </Link>
               </div>
 
-              <div className="w-full mt-4">
-                <Submit className="w-full font-bold hover:text-bole hover:bg-white text-xl text-white bg-green py-2.5 rounded-lg">
+              <div className="mt-4 w-full">
+                <Submit className="w-full rounded-lg bg-green py-2.5 text-xl font-bold text-white hover:bg-white hover:text-bole">
                   Log in
                 </Submit>
               </div>
-              </Form>
+            </Form>
           </div>
         </div>
       </DefaultLayout>
