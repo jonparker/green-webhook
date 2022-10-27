@@ -6,6 +6,8 @@ import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
+import DefaultLayout from 'src/layouts/DefaultLayout/DefaultLayout'
+
 const ForgotPasswordPage = () => {
   const { isAuthenticated, forgotPassword } = useAuth()
 
@@ -39,10 +41,9 @@ const ForgotPasswordPage = () => {
   return (
     <>
       <MetaTags title="Forgot Password" />
-
-      <main className="rw-main">
+      <DefaultLayout>
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-        <div className="rw-scaffold rw-login-container">
+        <div className="w-full lg:w-1/4">
           <div className="rw-segment">
             <header className="rw-segment-header">
               <h2 className="rw-heading rw-heading-secondary">
@@ -72,12 +73,6 @@ const ForgotPasswordPage = () => {
                     />
 
                     <FieldError name="username" className="rw-field-error" />
-
-                    <div className="">
-                      <Link to={routes.login()} className="rw-login-link">
-                        Login
-                      </Link>
-                    </div>
                   </div>
 
                   <div className="rw-button-group">
@@ -88,7 +83,7 @@ const ForgotPasswordPage = () => {
             </div>
           </div>
         </div>
-      </main>
+      </DefaultLayout>
     </>
   )
 }
