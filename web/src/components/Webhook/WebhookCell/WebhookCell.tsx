@@ -10,7 +10,9 @@ export const QUERY = gql`
       id
       alias
       createdAt
-      createdBy
+      createdBy {
+        name
+      }
       updatedAt
       destinationEndpoints
       invocationUri

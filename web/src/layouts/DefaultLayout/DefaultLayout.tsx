@@ -6,12 +6,11 @@ type DefaultLayoutProps = {
 }
 
 const DefaultLayout = ({ children }: DefaultLayoutProps) => {
-
   return (
     <>
       <Header />
       <Navigation buttonLabel="" buttonTo="home" />
-      <main className='flex items-center justify-center px-5'>{children}</main>
+      <main className="flex items-center justify-center px-5">{children}</main>
     </>
   )
 }

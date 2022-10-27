@@ -11,7 +11,7 @@ export const QUERY = gql`
       id
       alias
       createdAt
-      createdBy
+      createdById
       updatedAt
       destinationEndpoints
       invocationUri
@@ -31,10 +31,7 @@ export const Empty = () => {
   return (
     <div className="">
       {'No webhooks yet. '}
-      <Link
-        to={routes.newWebhook()}
-        className="rw-link"
-      >
+      <Link to={routes.newWebhook()} className="rw-link">
         {'Create one?'}
       </Link>
     </div>

@@ -1,11 +1,13 @@
+import type {
+  DeleteWebhookMutationVariables,
+  FindWebhookById,
+} from 'types/graphql'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-import { checkboxInputTag, timeTag,  } from 'src/lib/formatters'
-
-import type { DeleteWebhookMutationVariables, FindWebhookById } from 'types/graphql'
+import { checkboxInputTag, timeTag } from 'src/lib/formatters'
 
 const DELETE_WEBHOOK_MUTATION = gql`
   mutation DeleteWebhookMutation($id: String!) {
@@ -49,42 +51,38 @@ const Webhook = ({ webhook }: Props) => {
             <tr>
               <th>Id</th>
               <td>{webhook.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Alias</th>
               <td>{webhook.alias}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(webhook.createdAt)}</td>
-            </tr><tr>
-              <th>Created by</th>
-              <td>{webhook.createdBy}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Updated at</th>
               <td>{timeTag(webhook.updatedAt)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Destination endpoints</th>
               <td>{webhook.destinationEndpoints}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Invocation uri</th>
               <td>{webhook.invocationUri}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Max delay seconds</th>
               <td>{webhook.maxDelaySeconds}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Start at</th>
               <td>{timeTag(webhook.startAt)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Invocations</th>
               <td>{webhook.invocations}</td>
-            </tr><tr>
-              <th>Is enabled</th>
-              <td>{checkboxInputTag(webhook.isEnabled)}</td>
-            </tr><tr>
-              <th>Is archived</th>
-              <td>{checkboxInputTag(webhook.isArchived)}</td>
-            </tr><tr>
-              <th>Is deleted</th>
-              <td>{checkboxInputTag(webhook.isDeleted)}</td>
             </tr>
           </tbody>
         </table>

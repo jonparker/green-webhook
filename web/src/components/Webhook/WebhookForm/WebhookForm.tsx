@@ -10,10 +10,11 @@ import {
   TextField,
   NumberField,
   DatetimeLocalField,
-  CheckboxField,
   Submit,
 } from '@redwoodjs/forms'
 import type { RWGqlError } from '@redwoodjs/forms'
+
+import { azureRegions } from 'src/lib/azure-regions'
 
 const formatDatetime = (value) => {
   if (value) {
@@ -64,7 +65,10 @@ const getDestinationEndpoints = (webhook) => {
 }
 
 const WebhookForm = (props: WebhookFormProps) => {
-  const destinationLocationOptions = ['na', 'westus', 'eastus']
+  const destinationLocationOptions = [
+    'NA',
+    ...azureRegions.map((region) => region.RegionName),
+  ]
 
   const destinationEndpointInfo = getDestinationEndpoints(props.webhook)
 
@@ -90,6 +94,11 @@ const WebhookForm = (props: WebhookFormProps) => {
       {
         ...data,
         destinationEndpoints: calculatedDestinationEndpoints,
+        invocationUri: 'na',
+        invocations: 0,
+        isEnabled: true,
+        isDeleted: false,
+        isArchived: false,
       },
       props?.webhook?.id
     )
@@ -133,24 +142,6 @@ const WebhookForm = (props: WebhookFormProps) => {
         <FieldError name="alias" className="rw-field-error" />
 
         <Label
-          name="createdBy"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Created by
-        </Label>
-
-        <TextField
-          name="createdBy"
-          defaultValue={props.webhook?.createdBy}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        />
-
-        <FieldError name="createdBy" className="rw-field-error" />
-
-        <Label
           name="destinationEndpoints"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
@@ -167,7 +158,7 @@ const WebhookForm = (props: WebhookFormProps) => {
         />
 
         <Label name="destinationLocation" className="rw-label">
-          1st Destination endpoint location:
+          1st Destination endpoint Azure region:
         </Label>
         <select
           defaultValue={firstLocation}
@@ -196,7 +187,7 @@ const WebhookForm = (props: WebhookFormProps) => {
         />
 
         <Label name="destinationLocation" className="rw-label">
-          2nd Destination endpoint location:
+          2nd Destination endpoint Azure region:
         </Label>
         <select
           defaultValue={secondLocation}
@@ -209,24 +200,6 @@ const WebhookForm = (props: WebhookFormProps) => {
         </select>
 
         <FieldError name="destinationEndpoints" className="rw-field-error" />
-
-        <Label
-          name="invocationUri"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Invocation uri
-        </Label>
-
-        <TextField
-          name="invocationUri"
-          defaultValue={props.webhook?.invocationUri}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        />
-
-        <FieldError name="invocationUri" className="rw-field-error" />
 
         <Label
           name="maxDelaySeconds"
@@ -261,75 +234,6 @@ const WebhookForm = (props: WebhookFormProps) => {
         />
 
         <FieldError name="startAt" className="rw-field-error" />
-
-        <Label
-          name="invocations"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Invocations
-        </Label>
-
-        <NumberField
-          name="invocations"
-          defaultValue={props.webhook?.invocations}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        />
-
-        <FieldError name="invocations" className="rw-field-error" />
-
-        <Label
-          name="isEnabled"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Is enabled
-        </Label>
-
-        <CheckboxField
-          name="isEnabled"
-          defaultChecked={props.webhook?.isEnabled}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-        />
-
-        <FieldError name="isEnabled" className="rw-field-error" />
-
-        <Label
-          name="isArchived"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Is archived
-        </Label>
-
-        <CheckboxField
-          name="isArchived"
-          defaultChecked={props.webhook?.isArchived}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-        />
-
-        <FieldError name="isArchived" className="rw-field-error" />
-
-        <Label
-          name="isDeleted"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Is deleted
-        </Label>
-
-        <CheckboxField
-          name="isDeleted"
-          defaultChecked={props.webhook?.isDeleted}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-        />
-
-        <FieldError name="isDeleted" className="rw-field-error" />
 
         <div className="rw-button-group">
           <Submit disabled={props.loading} className="rw-button rw-button-blue">

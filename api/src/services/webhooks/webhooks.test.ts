@@ -31,20 +31,18 @@ describe('webhooks', () => {
   scenario('creates a webhook', async () => {
     const result = await createWebhook({
       input: {
-        createdBy: 'String',
         destinationEndpoints: 'String',
         invocationUri: 'String',
-        invocations: 5922178,
+        invocations: 585529,
         isEnabled: true,
         isArchived: true,
         isDeleted: true,
       },
     })
 
-    expect(result.createdBy).toEqual('String')
     expect(result.destinationEndpoints).toEqual('String')
     expect(result.invocationUri).toEqual('String')
-    expect(result.invocations).toEqual(5922178)
+    expect(result.invocations).toEqual(585529)
     expect(result.isEnabled).toEqual(true)
     expect(result.isArchived).toEqual(true)
     expect(result.isDeleted).toEqual(true)
@@ -54,10 +52,10 @@ describe('webhooks', () => {
     const original = (await webhook({ id: scenario.webhook.one.id })) as Webhook
     const result = await updateWebhook({
       id: original.id,
-      input: { createdBy: 'String2' },
+      input: { destinationEndpoints: 'String2' },
     })
 
-    expect(result.createdBy).toEqual('String2')
+    expect(result.destinationEndpoints).toEqual('String2')
   })
 
   scenario('deletes a webhook', async (scenario: StandardScenario) => {

@@ -47,16 +47,12 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
             <th>Id</th>
             <th>Alias</th>
             <th>Created at</th>
-            <th>Created by</th>
             <th>Updated at</th>
             <th>Destination endpoints</th>
             <th>Invocation uri</th>
             <th>Max delay seconds</th>
             <th>Start at</th>
             <th>Invocations</th>
-            <th>Is enabled</th>
-            <th>Is archived</th>
-            <th>Is deleted</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -66,7 +62,6 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
               <td>{truncate(webhook.id)}</td>
               <td>{truncate(webhook.alias)}</td>
               <td>{timeTag(webhook.createdAt)}</td>
-              <td>{truncate(webhook.createdBy)}</td>
               <td>{timeTag(webhook.updatedAt)}</td>
               <td>{truncate(webhook.destinationEndpoints)}</td>
               <td>
@@ -81,9 +76,6 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
               <td>{truncate(webhook.maxDelaySeconds)}</td>
               <td>{timeTag(webhook.startAt)}</td>
               <td>{truncate(webhook.invocations)}</td>
-              <td>{checkboxInputTag(webhook.isEnabled)}</td>
-              <td>{checkboxInputTag(webhook.isArchived)}</td>
-              <td>{checkboxInputTag(webhook.isDeleted)}</td>
               <td>
                 <nav className="rw-table-actions">
                   <Link

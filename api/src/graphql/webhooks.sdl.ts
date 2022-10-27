@@ -3,7 +3,8 @@ export const schema = gql`
     id: String!
     alias: String
     createdAt: DateTime!
-    createdBy: String!
+    createdById: String
+    createdBy: User
     updatedAt: DateTime!
     destinationEndpoints: String!
     invocationUri: String!
@@ -22,7 +23,7 @@ export const schema = gql`
 
   input CreateWebhookInput {
     alias: String
-    createdBy: String!
+    createdById: String
     destinationEndpoints: String!
     invocationUri: String!
     maxDelaySeconds: Int
@@ -35,7 +36,7 @@ export const schema = gql`
 
   input UpdateWebhookInput {
     alias: String
-    createdBy: String
+    createdById: String
     destinationEndpoints: String
     invocationUri: String
     maxDelaySeconds: Int
