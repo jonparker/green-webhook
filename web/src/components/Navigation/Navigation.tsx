@@ -1,7 +1,8 @@
-import { useAuth } from '@redwoodjs/auth'
-
 import React from 'react'
+
+import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
+
 import ListItem from '../ListItem/ListItem'
 
 interface NavProps {
@@ -14,7 +15,7 @@ const Navigation: React.FC<NavProps> = ({ buttonLabel, buttonTo }) => {
 
   return (
     <nav>
-      <ul className='flex flex-col justify-center w-full mt-12 divide-y-2 md:items-center lg:flex-row border-y-2 md:p-10 xl:gap-14 md:bg-green divide-green border-green'>
+      <ul className="mt-12 flex w-full flex-col justify-center divide-y-2 divide-green border-y-2 border-green md:items-center md:bg-green md:p-10 lg:flex-row xl:gap-14">
         <Link to={routes.home()}>
           <ListItem>Home</ListItem>
         </Link>
@@ -22,21 +23,25 @@ const Navigation: React.FC<NavProps> = ({ buttonLabel, buttonTo }) => {
           <ListItem>About</ListItem>
         </Link>
         {hasRole('admin') && (
-        <Link to={routes.users()}>
-          <ListItem>Admin</ListItem>
-        </Link>
+          <Link to={routes.users()}>
+            <ListItem>Admin</ListItem>
+          </Link>
         )}
         {isAuthenticated ? (
           <>
             <Link to={routes.webhooks()}>
               <ListItem>Webhooks</ListItem>
             </Link>
-              <a href="#" onClick={logOut}>
+            <button onClick={logOut}>
               <ListItem>Logout</ListItem>
-            </a>
-            <Link to={routes[`${buttonTo}`]()}>
-              <ListItem styles="bg-emerald-800 text-white">+ {buttonLabel}</ListItem>
-            </Link>
+            </button>
+            {buttonLabel ? (
+              <Link to={routes[`${buttonTo}`]()}>
+                <ListItem styles="bg-emerald-800 text-white">
+                  + {buttonLabel}
+                </ListItem>
+              </Link>
+            ) : null}
           </>
         ) : (
           <Link to={routes.login()}>
