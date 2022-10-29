@@ -374,4 +374,4 @@ export const azureRegions = [
     Longitude: '-43.2075',
     RegionName: 'brazilsoutheast',
   },
-]
+].filter((region) => region.Latitude !== null && region.Longitude !== null)
