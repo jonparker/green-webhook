@@ -70,7 +70,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
 
       let bestEndpoint = null
 
-      if (webhook.maxDelaySeconds > 0) {
+      if (webhook.maxDelaySeconds < 0) {
         return invalidWebhookId()
       } else {
         // Check Carbon Aware SDK for best location
