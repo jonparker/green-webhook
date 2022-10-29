@@ -71,17 +71,16 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
       let bestEndpoint = null
 
       if (webhook.maxDelaySeconds > 0) {
+        return invalidWebhookId()
+      } else {
         // Check Carbon Aware SDK for best location
-        const locations = endpoints.map((e) => e.split('|')[1]).filter((l) => l!='na')
+        const locations = endpoints.map((e) => e.location)
         const bestLocationInfo = await getLocationWithLowestEmissions(locations)
         logger.info('Best endpoint is', bestLocationInfo)
-        const foundBestEndpoint = endpoints
-          .map((e) => ({
-            endpoint: e.split('|')[0],
-            location: e.split('|')[1],
-          }))
-          .find((l) => l.location === bestLocationInfo.location)
-        bestEndpoint = foundBestEndpoint.endpoint
+        const foundBestEndpoint = endpoints.find(
+          (endpoint) => endpoint.location === bestLocationInfo.location
+        )
+        bestEndpoint = foundBestEndpoint.uri
       }
 
       if (bestEndpoint !== null) {
@@ -137,17 +136,28 @@ const getLocationWithLowestEmissions = async (locations: string[]) => {
       locationInfo.push(cache.get(location))
     } else {
       console.log('Cache miss for location', location)
-      const emissionsForLocation = await api.getEmissionsDataForLocationByTime(
-        location
-      )
-      locationInfo.push({
-        location,
-        carbonAwareInfo: emissionsForLocation.body[0],
-      })
-      cache.set(location, {
-        location,
-        carbonAwareInfo: emissionsForLocation.body[0],
-      })
+      try {
+        const emissionsForLocation =
+          await api.getEmissionsDataForLocationByTime(location)
+        if (emissionsForLocation.response.statusCode === 200) {
+          {
+            locationInfo.push({
+              location,
+              carbonAwareInfo: emissionsForLocation.body[0],
+            })
+            cache.set(location, {
+              location,
+              carbonAwareInfo: emissionsForLocation.body[0],
+            })
+          }
+        } else {
+          throw new Error(
+            `Error message: ${emissionsForLocation.response.statusMessage}, Status code: ${emissionsForLocation.response.statusCode}`
+          )
+        }
+      } catch (error) {
+        console.log('Error getting emissions for location', location, error)
+      }
     }
   }
   return locationInfo.sort(
