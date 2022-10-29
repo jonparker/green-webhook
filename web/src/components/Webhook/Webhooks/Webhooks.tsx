@@ -8,6 +8,7 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/Webhook/WebhooksCell'
+import { endpointHelper } from 'src/lib/endpointHelper'
 import { checkboxInputTag, timeTag, truncate } from 'src/lib/formatters'
 
 const DELETE_WEBHOOK_MUTATION = gql`
@@ -63,7 +64,17 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
               <td>{truncate(webhook.alias)}</td>
               <td>{timeTag(webhook.createdAt)}</td>
               <td>{timeTag(webhook.updatedAt)}</td>
-              <td>{truncate(webhook.destinationEndpoints)}</td>
+              <td>
+                {endpointHelper
+                  .decode(webhook.destinationEndpoints)
+                  .map((location, index) => {
+                    return (
+                      <div key={index}>
+                        {location.uri} - (<b>{location.location}</b>)
+                      </div>
+                    )
+                  })}
+              </td>
               <td>
                 <a
                   href={`${document.location.protocol}/\/${document.location.hostname}:${document.location.port}/.netlify/functions/webhook/${webhook.id}`}

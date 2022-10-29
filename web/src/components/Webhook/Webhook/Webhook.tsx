@@ -7,6 +7,7 @@ import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
+import { endpointHelper } from 'src/lib/endpointHelper'
 import { checkboxInputTag, timeTag } from 'src/lib/formatters'
 
 const DELETE_WEBHOOK_MUTATION = gql`
@@ -66,7 +67,17 @@ const Webhook = ({ webhook }: Props) => {
             </tr>
             <tr>
               <th>Destination endpoints</th>
-              <td>{webhook.destinationEndpoints}</td>
+              <td>
+                {endpointHelper
+                  .decode(webhook.destinationEndpoints)
+                  .map((location, index) => {
+                    return (
+                      <div key={index}>
+                        {location.uri} - (<b>{location.location}</b>)
+                      </div>
+                    )
+                  })}
+              </td>
             </tr>
             <tr>
               <th>Invocation uri</th>

@@ -3,6 +3,7 @@ import NodeCache from 'node-cache'
 
 import { CarbonAwareApi } from 'src/lib/carbon-aware-api/api'
 import { db } from 'src/lib/db'
+import { endpointHelper } from 'src/lib/endpointHelper'
 import { logger } from 'src/lib/logger'
 import { forwardWebhook } from 'src/services/forwardWebhook/forwardWebhook'
 
@@ -65,7 +66,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
     // 4. Calculate which endpoint to call or how long to delay calling the endpoint.
     // 5. Call the endpoint with the payload or schedule a delayed call.
     if (event.httpMethod === 'POST' || event.httpMethod === 'GET') {
-      const endpoints = webhook.destinationEndpoints.split(',')
+      const endpoints = endpointHelper.decode(webhook.destinationEndpoints)
 
       let bestEndpoint = null
 

@@ -15,6 +15,7 @@ import {
 import type { RWGqlError } from '@redwoodjs/forms'
 
 import { azureRegions } from 'src/lib/azure-regions'
+import { endpointHelper } from 'src/lib/endpointHelper'
 
 const formatDatetime = (value) => {
   if (value) {
@@ -31,69 +32,20 @@ interface WebhookFormProps {
   loading: boolean
 }
 
-const getDestinationEndpoints = (webhook) => {
-  const destinationEndpoints = webhook?.destinationEndpoints
-
-  if (!destinationEndpoints) {
-    return {
-      firstDestinationEndpoint: {},
-      secondDestinationEndpoint: {},
-    }
-  }
-
-  const destinationEndpointList = destinationEndpoints?.split(',')
-
-  if (destinationEndpointList.length === 1) {
-    return {
-      firstDestinationEndpoint: {
-        uri: destinationEndpointList[0]?.split('|')[0],
-        location: destinationEndpointList[0]?.split('|')[1],
-      },
-    }
-  }
-
-  return {
-    firstDestinationEndpoint: {
-      uri: destinationEndpointList[0]?.split('|')[0],
-      location: destinationEndpointList[0]?.split('|')[1],
-    },
-    secondDestinationEndpoint: {
-      uri: destinationEndpointList[1]?.split('|')[0],
-      location: destinationEndpointList[1]?.split('|')[1],
-    },
-  }
-}
-
 const WebhookForm = (props: WebhookFormProps) => {
   const destinationLocationOptions = [
-    'NA',
     ...azureRegions.map((region) => region.RegionName),
   ]
 
-  const destinationEndpointInfo = getDestinationEndpoints(props.webhook)
-
-  const [firstDestinationEndpoint, setFirstDestinationEndpoint] = useState(
-    destinationEndpointInfo.firstDestinationEndpoint?.uri || ''
+  const [endpoints, setEndpoints] = useState(
+    endpointHelper.decode(props.webhook?.destinationEndpoints || '[]')
   )
 
-  const [secondDestinationEndpoint, setSecondDestinationEndpoint] = useState(
-    destinationEndpointInfo.secondDestinationEndpoint?.uri || ''
-  )
-
-  const [firstLocation, setFirstLocation] = useState(
-    destinationEndpointInfo.firstDestinationEndpoint?.location || 'na'
-  )
-
-  const [secondLocation, setSecondLocation] = useState(
-    destinationEndpointInfo.secondDestinationEndpoint?.location || 'na'
-  )
   const onSubmit = (data: FormWebhook) => {
-    const calculatedDestinationEndpoints = `${firstDestinationEndpoint}|${firstLocation},${secondDestinationEndpoint}|${secondLocation}`
-    console.log('Final value:', calculatedDestinationEndpoints)
     props.onSave(
       {
         ...data,
-        destinationEndpoints: calculatedDestinationEndpoints,
+        destinationEndpoints: endpointHelper.encode(endpoints),
         invocationUri: 'na',
         invocations: 0,
         isEnabled: true,
@@ -104,14 +56,20 @@ const WebhookForm = (props: WebhookFormProps) => {
     )
   }
 
-  const updateFirstDestinationLocation = (value) => {
-    console.log(value.target.value)
-    setFirstLocation(value.target.value)
+  const updateEndpointLocation = (location, index) => {
+    const endpoint = endpoints[index]
+    if (endpoint) {
+      endpoint.location = location
+    }
+    setEndpoints(endpoints)
   }
 
-  const updateSecondDestinationLocation = (value) => {
-    console.log(value.target.value)
-    setSecondLocation(value.target.value)
+  const updateEndpointUri = (uri, index) => {
+    const endpoint = endpoints[index]
+    if (endpoint) {
+      endpoint.uri = uri
+    }
+    setEndpoints(endpoints)
   }
 
   return (
@@ -141,65 +99,63 @@ const WebhookForm = (props: WebhookFormProps) => {
 
         <FieldError name="alias" className="rw-field-error" />
 
-        <Label
-          name="destinationEndpoints"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          1st Destination endpoint:
-        </Label>
+        {endpoints.map((endpoint, index) => {
+          return (
+            <>
+              <Label
+                name={`destinationEndpointLabel-${index}`}
+                htmlFor={`destinationEndpoint-${index}`}
+                className="rw-label"
+                errorClassName="rw-label rw-label-error"
+              >
+                Destination endpoint {index + 1}:
+              </Label>
+
+              <input
+                type="text"
+                name={`destinationEndpoint-${index}`}
+                defaultValue={endpoint.uri}
+                className="rw-input"
+                onChange={(e) => updateEndpointUri(e.target.value, index)}
+              />
+              <Label name="destinationLocation" className="rw-label">
+                Destination endpoint Azure region {index + 1}:
+              </Label>
+              <select
+                defaultValue={endpoint.location}
+                name={`destinationLocation-${index}`}
+                multiple={false}
+                onChange={(e) => updateEndpointLocation(e.target.value, index)}
+              >
+                {destinationLocationOptions.map((option) => (
+                  <option key={option}>{option}</option>
+                ))}
+              </select>
+              <input
+                type="button"
+                value="Remove"
+                onClick={() =>
+                  setEndpoints([
+                    ...endpoints.filter(
+                      (e) => e.location !== endpoint.location
+                    ),
+                  ])
+                }
+              />
+            </>
+          )
+        })}
 
         <input
-          type="text"
-          name="firstDestination"
-          value={firstDestinationEndpoint}
-          className="rw-input"
-          onChange={(e) => setFirstDestinationEndpoint(e.target.value)}
+          type="button"
+          value="Add endpoint"
+          onClick={() =>
+            setEndpoints([
+              ...endpoints,
+              { uri: '', location: destinationLocationOptions[0] },
+            ])
+          }
         />
-
-        <Label name="destinationLocation" className="rw-label">
-          1st Destination endpoint Azure region:
-        </Label>
-        <select
-          defaultValue={firstLocation}
-          multiple={false}
-          onChange={updateFirstDestinationLocation}
-        >
-          {destinationLocationOptions.map((option) => (
-            <option key={option}>{option}</option>
-          ))}
-        </select>
-
-        <Label
-          name="destinationEndpoints"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          2nd Destination endpoint:
-        </Label>
-
-        <input
-          type="text"
-          name="secondDestination"
-          value={secondDestinationEndpoint}
-          className="rw-input"
-          onChange={(e) => setSecondDestinationEndpoint(e.target.value)}
-        />
-
-        <Label name="destinationLocation" className="rw-label">
-          2nd Destination endpoint Azure region:
-        </Label>
-        <select
-          defaultValue={secondLocation}
-          multiple={false}
-          onChange={updateSecondDestinationLocation}
-        >
-          {destinationLocationOptions.map((option) => (
-            <option key={option}>{option}</option>
-          ))}
-        </select>
-
-        <FieldError name="destinationEndpoints" className="rw-field-error" />
 
         <Label
           name="maxDelaySeconds"
