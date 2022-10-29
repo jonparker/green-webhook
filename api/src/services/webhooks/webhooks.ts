@@ -40,16 +40,28 @@ export const updateWebhook: MutationResolvers['updateWebhook'] = ({
   input,
 }) => {
   const createdById = context.currentUser.id
+  const webhook = db.webhook.findFirst({
+    where: { id, createdById },
+  })
+  if (!webhook) {
+    throw new Error(`You don't have permission to update this webhook`)
+  }
   return db.webhook.update({
     data: input,
-    where: { id, createdById },
+    where: { id },
   })
 }
 
 export const deleteWebhook: MutationResolvers['deleteWebhook'] = ({ id }) => {
   const createdById = context.currentUser.id
-  return db.webhook.delete({
+  const webhook = db.webhook.findFirst({
     where: { id, createdById },
+  })
+  if (!webhook) {
+    throw new Error(`You don't have permission to delete this webhook`)
+  }
+  return db.webhook.delete({
+    where: { id },
   })
 }
 
