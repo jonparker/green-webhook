@@ -88,6 +88,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
           httpMethod: event.httpMethod,
           payload: event.body,
           endpoint: bestEndpoint,
+          queryParams: event.queryStringParameters
         })
         logger.info(`Endpoint response`, endpointResponse)
 
