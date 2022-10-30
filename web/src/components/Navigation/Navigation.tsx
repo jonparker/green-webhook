@@ -44,10 +44,24 @@ const Navigation: React.FC<NavProps> = ({ buttonLabel, buttonTo }) => {
             ) : null}
           </>
         ) : (
-          <Link to={routes.login()}>
-            <ListItem>Login</ListItem>
-          </Link>
+          <>
+            <Link to={routes.login()}>
+              <ListItem>Login</ListItem>
+            </Link>
+            <Link to={routes.signup()}>
+              <ListItem>Get started</ListItem>
+            </Link>
+          </>
         )}
+        <a
+          href="https://green-webhook.gitbook.io/green-webhook/"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <li className="w-full bg-white px-10 py-2 text-center text-lg font-bold tracking-wider text-bole hover:cursor-pointer hover:bg-bole hover:text-white md:w-fit md:rounded-md  md:transition md:duration-300 md:ease-in-out md:hover:-translate-y-1 md:hover:scale-110">
+            Docs ↗️
+          </li>
+        </a>
       </ul>
     </nav>
   )
