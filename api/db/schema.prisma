@@ -57,5 +57,8 @@ model ScheduledInvocation {
   isCompleted        Boolean
   successfulResponse Boolean
   endpointUri        String
+  payload            String
+  httpMethod         String
+  queryParams        String
 }
 
