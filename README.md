@@ -71,7 +71,18 @@ Create a free database via https://railway.app and copy the connection URL and r
 
 If you want to be able to send emails to reset passwords then you will need to create a SendInBlue account and create an API key and replace `SEND_IN_BLUE_KEY` with the API key.
 
-Now when `yarn install` is finished you're ready to run locally:
+Now when `yarn install` is finished you're ready to create the database tables in your Railway database.
+
+```
+yarn redwood prisma migrate dev
+```
+
+Once this finishes you should see tables appear in the database in Railway
+
+<img width="738" alt="image" src="https://user-images.githubusercontent.com/152131/198857398-8377c8da-1f68-49cb-a4f0-353d81e28eaf.png">
+
+
+Now you can run the app locally:
 
 ```
 yarn redwood dev
