@@ -25,6 +25,7 @@ model Webhook {
   isEnabled Boolean
   isArchived Boolean
   isDeleted Boolean
+  ScheduledInvocations ScheduledInvocation[]
 }
 
 model User {
@@ -47,3 +48,14 @@ model Audit {
   user      User     @relation(fields: [userId], references: [id])
   log       String
 }
+
+model ScheduledInvocation {
+  id                 String @id @default(cuid())
+  webhookId          String
+  webhook            Webhook @relation(fields: [webhookId], references: [id])
+  invokeEndpointAt   DateTime
+  isCompleted        Boolean
+  successfulResponse Boolean
+  endpointUri        String
+}
+
