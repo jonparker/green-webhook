@@ -17,15 +17,17 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
       }
     }
 
-    const currentDateTime = new Date(Date.now() * 1000)
+    const currentDateTime = new Date(Date.now())
     const scheduledInvocations = await db.scheduledInvocation.findMany({
       where: {
         invokeEndpointAt: {
-          lte: currentDateTime,
+          lte: currentDateTime.toISOString(),
         },
         isCompleted: false,
       },
     })
+
+    logger.info(`Found ${scheduledInvocations.length} scheduled invocations`)
 
     for (const schedule of scheduledInvocations) {
       const webhook = {
@@ -41,11 +43,16 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
         where: { id: schedule.id },
         data: {
           isCompleted: true,
-          successfulResponse: res.statusCode === 200 || res.statusCode === 201,
+          successfulResponse: res?.statusCode === 200 || res.statusCode === 201,
         },
       })
     }
   } catch (error) {
     logger.error('Error in scheduledWebhooks', { error })
+  }
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ data: 'ok' }),
   }
 }
