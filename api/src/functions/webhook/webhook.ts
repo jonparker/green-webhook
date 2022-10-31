@@ -212,6 +212,10 @@ const getLocationWithLowestEmissions = async (locations: string[], maxDelaySecon
     carbonRatingForDuration: Math.floor(minTotalCarbs/durationWindow)
   }
 
+  // TODO
+  // make type like LocationInfo for bestCombination
+  // make the function as a separate module
+
   return bestCombination
 }
 
