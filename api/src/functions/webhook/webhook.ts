@@ -164,6 +164,30 @@ const getLocationWithLowestEmissions = async (locations: string[], maxDelaySecon
       if(durationWindow > allEmissionsSize) {
         // throw error
       }
+
+      let currentTotalCarbs = 0;
+
+      for(let i=0; i<durationWindow; i++) {
+        currentTotalCarbs += allEmissions[i].value
+      }
+
+      if(currentTotalCarbs < minTotalCarbs) {
+        minTotalCarbs = currentTotalCarbs
+        bestLocation = location
+        bestTimestamp = allEmissions[0].timestamp
+      }
+
+      for(let i=0, j=durationWindow; i<delayIndex && j<allEmissionsSize; i++, j++) {
+        currentTotalCarbs -= allEmissions[i].value
+        currentTotalCarbs += allEmissions[j].value
+
+        if(currentTotalCarbs < minTotalCarbs) {
+          minTotalCarbs = currentTotalCarbs
+          bestLocation = location
+          bestTimestamp = allEmissions[i+1].timestamp
+        }
+      }
+      
     } catch (error) {
       console.log('Error getting emissions for location', location, error)
     }
