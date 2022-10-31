@@ -114,15 +114,15 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
   return invalidWebhookId()
 }
 
-type LocationInfo = {
-  location: string
-  carbonAwareInfo: {
-    location?: string
-    time?: Date
-    rating?: number
-    duration?: string
-  }
-}
+// type LocationInfo = {
+//   location: string
+//   carbonAwareInfo: {
+//     location?: string
+//     time?: Date
+//     rating?: number
+//     duration?: string
+//   }
+// }
 
 const getLocationWithLowestEmissions = async (locations: string[], maxDelaySeconds: number, lastRecordedDuration: number = 700) => {
   const locationInfo = new Array<LocationInfo>()
@@ -187,43 +187,19 @@ const getLocationWithLowestEmissions = async (locations: string[], maxDelaySecon
           bestTimestamp = allEmissions[i+1].timestamp
         }
       }
-      
+
     } catch (error) {
       console.log('Error getting emissions for location', location, error)
     }
-
-    if (cache.has(location) === true) {
-      console.log('Cache hit for location', location)
-      locationInfo.push(cache.get(location))
-    } else {
-      console.log('Cache miss for location', location)
-      try {
-        const emissionsForLocation =
-          await api.getEmissionsDataForLocationByTime(location)
-        if (emissionsForLocation.response.statusCode === 200) {
-          {
-            locationInfo.push({
-              location,
-              carbonAwareInfo: emissionsForLocation.body[0],
-            })
-            cache.set(location, {
-              location,
-              carbonAwareInfo: emissionsForLocation.body[0],
-            })
-          }
-        } else {
-          throw new Error(
-            `Error message: ${emissionsForLocation.response.statusMessage}, Status code: ${emissionsForLocation.response.statusCode}`
-          )
-        }
-      } catch (error) {
-        console.log('Error getting emissions for location', location, error)
-      }
-    }
   }
-  return locationInfo.sort(
-    (a, b) => a.carbonAwareInfo.rating - b.carbonAwareInfo.rating
-  )[0]
+
+  const bestCombination = {
+    location: bestLocation,
+    timestamp: bestTimestamp,
+    carbonRatingForDuration: Math.floor(minTotalCarbs/durationWindow)
+  }
+
+  return bestCombination
 }
 
 const invalidWebhookId = () => {
