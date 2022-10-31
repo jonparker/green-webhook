@@ -154,15 +154,24 @@ const getLocationWithLowestEmissions = async (locations: string[], maxDelaySecon
       const emissionForcast = await api.getCurrentForecastData(Array.of(location));
       const currentEmission = await api.getEmissionsDataForLocationByTime(location);
 
-      if(emissionForcast.response.statusCode!==200 || currentEmission.response.statusCode!==200) {
-        // throw error
+      if(emissionForcast.response.statusCode!==200) {
+        throw new Error(
+          `Error message: ${emissionForcast.response.statusMessage}, Status code: ${emissionForcast.response.statusCode}`
+        )
+      }
+      if(currentEmission.response.statusCode!==200) {
+        throw new Error(
+          `Error message: ${currentEmission.response.statusMessage}, Status code: ${currentEmission.response.statusCode}`
+        )
       }
 
       const allEmissions = [currentEmission[0], ...emissionForcast.body[0].forecastData];
       const allEmissionsSize = allEmissions.length
 
       if(durationWindow > allEmissionsSize) {
-        // throw error
+        throw new Error(
+          `Error message: Forcast not available yet, Status code: 404}`
+        )
       }
 
       let currentTotalCarbs = 0;
