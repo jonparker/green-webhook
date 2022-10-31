@@ -165,7 +165,11 @@ const getLocationWithLowestEmissions = async (locations: string[], maxDelaySecon
         )
       }
 
-      const allEmissions = [currentEmission[0], ...emissionForcast.body[0].forecastData];
+      const newCurrentEmission = {...currentEmission.body[0], timestamp: currentEmission.body[0].time, value: currentEmission.body[0].rating}
+      delete newCurrentEmission.time
+      delete newCurrentEmission.rating
+
+      const allEmissions = [newCurrentEmission, ...emissionForcast.body[0].forecastData];
       const allEmissionsSize = allEmissions.length
 
       if(durationWindow > allEmissionsSize) {
