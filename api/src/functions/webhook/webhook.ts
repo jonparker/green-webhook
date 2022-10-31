@@ -151,12 +151,12 @@ const getLocationWithLowestEmissions = async (locations: string[], maxDelaySecon
   for (const location of locations) {
 
     try {
-      const emissionForcast = await api.getCurrentForecastData(Array.of(location));
+      const emissionForecast = await api.getCurrentForecastData(Array.of(location));
       const currentEmission = await api.getEmissionsDataForLocationByTime(location);
 
-      if(emissionForcast.response.statusCode!==200) {
+      if(emissionForecast.response.statusCode!==200) {
         throw new Error(
-          `Error message: ${emissionForcast.response.statusMessage}, Status code: ${emissionForcast.response.statusCode}`
+          `Error message: ${emissionForecast.response.statusMessage}, Status code: ${emissionForecast.response.statusCode}`
         )
       }
       if(currentEmission.response.statusCode!==200) {
@@ -169,7 +169,7 @@ const getLocationWithLowestEmissions = async (locations: string[], maxDelaySecon
       delete newCurrentEmission.time
       delete newCurrentEmission.rating
 
-      const allEmissions = [newCurrentEmission, ...emissionForcast.body[0].forecastData];
+      const allEmissions = [newCurrentEmission, ...emissionForecast.body[0].forecastData];
       const allEmissionsSize = allEmissions.length
 
       if(durationWindow > allEmissionsSize) {
