@@ -1,17 +1,14 @@
-# README
+# 💚 Welcome to [Green Webhook](https://greenwebhook.netlify.app/)! 💚
 
-💚 Welcome to [Green Webhook](https://greenwebhook.netlify.app/)! 💚
-
-GreenWebhook is a proxy or gateway between two systems that intelligently chooses which endpoint to send a webhook event to in order to location shift or time shift (comming soon) compute workloads to the endpoint with the lowest carbon intensity. It uses the [Carbon Aware SDK](https://github.com/Green-Software-Foundation/carbon-aware-sdk) to check the impact of an increased demand on the electricity grid for the relevant locations.
+Green Webhook is a proxy or gateway between two systems that intelligently chooses which endpoint to send a webhook event to in order to location shift or time shift (coming soon) compute workloads to the endpoint with the lowest carbon intensity. It uses the [Carbon Aware SDK](https://github.com/Green-Software-Foundation/carbon-aware-sdk) to check the impact of an increased demand on the electricity grid for the relevant locations.
 
 By deploying your workload to multiple regions and configuring each endpoint along with its location within a Green Webhook you can reduce the carbon emissions caused by your workload.
 
-Currently GreenWebhook support only Azure regions but as the Carbon Aware SDK adds more support for other locations GreenWebhook will be able to support them too.
+Currently Green Webhook supports only Azure regions but as the Carbon Aware SDK adds more support for other locations Green Webhook will be able to support them too.
 
-GreenWebhook is built on [RedwoodJS](https://redwoodjs.com) and uses [![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)](https://reactjs.org/) [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://www.typescriptlang.org/) [![GraphQL](https://img.shields.io/badge/-GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)](https://graphql.org/) [![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)](https://www.prisma.io/) [![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org) [![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+Green Webhook is built on [RedwoodJS](https://redwoodjs.com) and uses:
 
-
-# Examples
+[![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)](https://reactjs.org/) [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://www.typescriptlang.org/) [![GraphQL](https://img.shields.io/badge/-GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)](https://graphql.org/) [![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)](https://www.prisma.io/) [![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org) [![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
 ## Create a webhook that runs code on your laptop via ngrok
 
@@ -23,18 +20,18 @@ export default function handler(req, res) {
   res.status(200).json({ name: "John Doe" });
 }
 ```
+
 3. In a terminal run `npm run dev`
-4. Install Ngrok from https://ngrok.com/
+4. Install [Ngrok](https://ngrok.com/)
 5. In a terminal run `ngrok http 3000`
 6. Copy the URL output by Ngrok and add `/api/user` to the end
-7. Log in to https://greenwebhook.netlify.app and create a new webhook.
-8. Paste the URL from step 6 into the destination.
-9. Click Save
-10. Click on the `Invocation URI` link to trigger the webhook.
+7. Log in to <https://greenwebhook.netlify.app> and create a new webhook
+8. Paste the URL from step 6 into the destination
+9.  Click Save
+10. Click on the `Invocation URI` link to trigger the webhook
 11. Confirm that the response is `200` and contains JSON `{ name: "John Doe" }`
 
 Currently the Carbon Aware SDK only supports a limited list of locations but when more locations are supported then we will be able to allow you to put in the location where your computer or laptop is running in order to determine if it is the location with the lowest carbon intensity.
-
 
 ## Getting started developing locally
 
@@ -49,7 +46,7 @@ Start by installing dependencies:
 yarn install
 ```
 
-While that is running create a file in the root folder called `.env` and copy this into it:
+Whilst that is running, create a file in the root folder called `.env` and copy the following into it:
 
 ```
 # Used to encrypt/decrypt session cookies. Change this value and re-deploy to log out all users of your app at once.
@@ -65,9 +62,8 @@ CARBON_AWARE_API_BASE_URI="https://carbon-aware-api.azurewebsites.net"
 
 Replace `YOUR_SESSION_SECRET` with the secret generated by running `yarn rw generate secret`.
 
-Create a free database via https://railway.app and copy the connection URL and replace `YOUR_RAILWAY_DB_URL` with it
+Create a free database via <https://railway.app> and copy the connection URL and replace `YOUR_RAILWAY_DB_URL` with it
 <img width="913" alt="image" src="https://user-images.githubusercontent.com/152131/198857124-22eb84ff-23a0-4d65-878d-3757d17ffc6b.png">
-
 
 If you want to be able to send emails to reset passwords then you will need to create a SendInBlue account and create an API key and replace `SEND_IN_BLUE_KEY` with the API key.
 
@@ -81,23 +77,20 @@ Once this finishes you should see tables appear in the database in Railway
 
 <img width="738" alt="image" src="https://user-images.githubusercontent.com/152131/198857398-8377c8da-1f68-49cb-a4f0-353d81e28eaf.png">
 
-
 Now you can run the app locally:
 
 ```
-yarn redwood dev
+yarn rw dev
 ```
 
-Your browser should automatically open to http://localhost:8910 where you'll see the Home page.
+Your browser should automatically open to <http://localhost:8910> where you'll see the Home page.
 
 ## Frontend first with Storybook
 
 Don't know what your data models look like?
-That's more than ok—Redwood integrates Storybook so that you can work on design without worrying about data.
+That's more than ok — Redwood integrates [Storybook](https://storybook.js.org/) so that you can work on design without worrying about data.
 Mockup, build, and verify your React components, even in complete isolation from the backend:
 
 ```
 yarn rw storybook
 ```
-
-
