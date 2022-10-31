@@ -75,7 +75,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
       } else {
         // Check Carbon Aware SDK for best location
         const locations = endpoints.map((e) => e.location)
-        const bestLocationInfo = await getLocationWithLowestEmissions(locations)
+        const bestLocationInfo = await getLocationWithLowestEmissions(locations, webhook.maxDelaySeconds)
         logger.info('Best endpoint is', bestLocationInfo)
         const foundBestEndpoint = endpoints.find(
           (endpoint) => endpoint.location === bestLocationInfo.location
