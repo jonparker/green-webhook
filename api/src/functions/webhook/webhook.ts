@@ -145,8 +145,29 @@ const getLocationWithLowestEmissions = async (locations: string[], maxDelaySecon
     seconds: (lastRecordedDuration % 3600) % 60
   }
   const durationWindow = Math.ceil(((Math.floor(estimatedTime.hours) * 60) + Math.floor(estimatedTime.minutes)) / 5)
-  
+
+  let bestLocation, bestTimestamp, minTotalCarbs = 999;
+
   for (const location of locations) {
+
+    try {
+      const emissionForcast = await api.getCurrentForecastData(Array.of(location));
+      const currentEmission = await api.getEmissionsDataForLocationByTime(location);
+
+      if(emissionForcast.response.statusCode!==200 || currentEmission.response.statusCode!==200) {
+        // throw error
+      }
+
+      const allEmissions = [currentEmission[0], ...emissionForcast.body[0].forecastData];
+      const allEmissionsSize = allEmissions.length
+
+      if(durationWindow > allEmissionsSize) {
+        // throw error
+      }
+    } catch (error) {
+      console.log('Error getting emissions for location', location, error)
+    }
+
     if (cache.has(location) === true) {
       console.log('Cache hit for location', location)
       locationInfo.push(cache.get(location))
