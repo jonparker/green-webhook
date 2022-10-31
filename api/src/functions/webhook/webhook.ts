@@ -124,13 +124,28 @@ type LocationInfo = {
   }
 }
 
-const getLocationWithLowestEmissions = async (locations: string[]) => {
+const getLocationWithLowestEmissions = async (locations: string[], maxDelaySeconds: number, lastRecordedDuration: number = 700) => {
   const locationInfo = new Array<LocationInfo>()
   const baseUri = process.env.CARBON_AWARE_API_BASE_URI
   if (!baseUri) {
     throw new Error("Missing 'CARBON_AWARE_API_BASE_URI' environment variable")
   }
   const api = new CarbonAwareApi(baseUri)
+
+  const maxDelayTime = {
+    hours: (maxDelaySeconds / 3600),
+    minutes: (maxDelaySeconds % 3600) / 60,
+    seconds: (maxDelaySeconds % 3600) % 60
+  }
+  const delayIndex = Math.floor(((Math.floor(maxDelayTime.hours) * 60) + Math.floor(maxDelayTime.minutes)) / 5)
+
+  const estimatedTime = {
+    hours: (lastRecordedDuration / 3600),
+    minutes: (lastRecordedDuration % 3600) / 60,
+    seconds: (lastRecordedDuration % 3600) % 60
+  }
+  const durationWindow = Math.ceil(((Math.floor(estimatedTime.hours) * 60) + Math.floor(estimatedTime.minutes)) / 5)
+  
   for (const location of locations) {
     if (cache.has(location) === true) {
       console.log('Cache hit for location', location)
