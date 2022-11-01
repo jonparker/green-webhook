@@ -9,7 +9,7 @@ import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/Webhook/WebhooksCell'
 import { endpointHelper } from 'src/lib/endpointHelper'
-import { checkboxInputTag, timeTag, truncate } from 'src/lib/formatters'
+import {  timeTag, truncate } from 'src/lib/formatters'
 
 const DELETE_WEBHOOK_MUTATION = gql`
   mutation DeleteWebhookMutation($id: String!) {
@@ -45,15 +45,15 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
       <table className="rw-table">
         <thead>
           <tr>
-            <th>Id</th>
-            <th>Alias</th>
-            <th>Created at</th>
-            <th>Updated at</th>
-            <th>Destination endpoints</th>
-            <th>Invocation uri</th>
-            <th>Max delay seconds</th>
-            <th>Start at</th>
-            <th>Invocations</th>
+            <th className='text-black'>Id</th>
+            <th className='text-black'>Alias</th>
+            <th className='text-black'>Created at</th>
+            <th className='text-black'>Updated at</th>
+            <th className='text-black'>Destination endpoints</th>
+            <th className='text-black'>Invocation uri</th>
+            <th className='text-black'>Max delay seconds</th>
+            <th className='text-black'>Start at</th>
+            <th className='text-black'>Invocations</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -80,6 +80,7 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
                   href={`${document.location.protocol}/\/${document.location.hostname}:${document.location.port}/.netlify/functions/webhook/${webhook.id}`}
                   target="_blank"
                   rel="noreferrer"
+                  className='bg-transparent'
                 >
                   Invocation URI
                 </a>
@@ -88,7 +89,7 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
               <td>{timeTag(webhook.startAt)}</td>
               <td>{truncate(webhook.invocations)}</td>
               <td>
-                <nav className="rw-table-actions">
+                <nav className="rw-table-actions bg-transparent">
                   <Link
                     to={routes.webhook({ id: webhook.id })}
                     title={'Show webhook ' + webhook.id + ' detail'}
