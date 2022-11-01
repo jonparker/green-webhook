@@ -12,7 +12,7 @@ import {
 } from '@redwoodjs/forms'
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import { toast, Toaster } from '@redwoodjs/web/toast'
+import { toast } from '@redwoodjs/web/toast'
 
 import DefaultLayout from 'src/layouts/DefaultLayout/DefaultLayout'
 
@@ -50,30 +50,30 @@ const SignupPage = () => {
       <DefaultLayout>
         <div className="w-full lg:w-1/4">
           <div className="w-full rounded-lg bg-gray-200 py-8 px-7">
-            <h2 className="text-center text-4xl font-bold text-gray-600">
+            <h2 className="bg-gray-200 text-center text-4xl font-bold text-gray-600">
               Create account
             </h2>
-            <div className="mt-3 w-full text-center">
-              <span className="text-base font-medium text-gray-500">
+            <div className="bg-gray-200 mt-3 w-full text-center">
+              <span className="bg-gray-200 text-base font-medium text-gray-500">
                 Already have an account?
               </span>{' '}
-              <Link to={routes.login()} className="rw-link">
+              <Link to={routes.login()} className="rw-link bg-gray-200">
                 Log in!
               </Link>
             </div>
-            <Form onSubmit={onSubmit}>
+            <Form onSubmit={onSubmit} className="bg-gray-200">
               <Label
                 name="username"
-                className="rw-label"
-                errorClassName="rw-label rw-label-error"
+                className="rw-label bg-gray-200"
+                errorClassName="rw-label rw-label-error bg-gray-200"
               >
                 Email address
               </Label>
               <TextField
                 name="username"
                 placeholder="Email address"
-                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none"
-                errorClassName="rw-input rw-input-error"
+                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none text-gray-600"
+                errorClassName="rw-input rw-input-error bg-gray-200"
                 ref={usernameRef}
                 validation={{
                   required: {
@@ -82,19 +82,19 @@ const SignupPage = () => {
                   },
                 }}
               />
-              <FieldError name="username" className="rw-field-error" />
+              <FieldError name="username" className="rw-field-error bg-gray-200" />
               <Label
                 name="password"
-                className="rw-label"
-                errorClassName="rw-label rw-label-error"
+                className="rw-label bg-gray-200"
+                errorClassName="rw-label rw-label-error bg-gray-200"
               >
                 Password
               </Label>
               <PasswordField
                 name="password"
                 placeholder="Password"
-                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none"
-                errorClassName="rw-input rw-input-error"
+                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none text-gray-600"
+                errorClassName="rw-input rw-input-error bg-gray-200"
                 autoComplete="current-password"
                 validation={{
                   required: {
@@ -103,8 +103,8 @@ const SignupPage = () => {
                   },
                 }}
               />
-              <FieldError name="password" className="rw-field-error" />
-              <div className="mt-4 w-full">
+              <FieldError name="password" className="rw-field-error bg-gray-200" />
+              <div className="mt-4 w-full bg-gray-200">
                 <Submit className="w-full rounded-lg bg-green py-2.5 text-xl font-bold text-white hover:bg-white hover:text-bole">
                   Sign up
                 </Submit>

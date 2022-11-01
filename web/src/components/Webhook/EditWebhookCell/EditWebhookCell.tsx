@@ -74,20 +74,16 @@ export const Success = ({ webhook }: CellSuccessProps<EditWebhookById>) => {
   }
 
   return (
-    <div className="rw-segment">
-      <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">
-          Edit Webhook {webhook?.id}
-        </h2>
-      </header>
-      <div className="rw-segment-main">
-        <WebhookForm
-          webhook={webhook}
-          onSave={onSave}
-          error={error}
-          loading={loading}
-        />
-      </div>
+    <div className="w-full max-w-7xl rounded-lg bg-gray-200 py-8 px-7">
+      <h2 className="bg-gray-200 text-center text-4xl font-bold text-gray-600">
+        Edit Webhook: <i className='text-gray-600 bg-transparent font-normal'>{webhook?.id}</i>
+      </h2>
+      <WebhookForm
+        webhook={webhook}
+        onSave={onSave}
+        error={error}
+        loading={loading}
+      />
     </div>
   )
 }

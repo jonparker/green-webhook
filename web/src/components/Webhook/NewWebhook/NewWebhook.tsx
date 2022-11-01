@@ -33,14 +33,12 @@ const NewWebhook = () => {
   }
 
   return (
-    <div className="rw-segment">
-      <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">New Webhook</h2>
-      </header>
-      <div className="rw-segment-main">
+      <div className="w-full rounded-lg bg-gray-200 py-8 px-7 max-w-7xl">
+        <h2 className="bg-gray-200 text-center text-4xl font-bold text-gray-600">
+          New webhook
+        </h2>
         <WebhookForm onSave={onSave} loading={loading} error={error} />
       </div>
-    </div>
   )
 }
 

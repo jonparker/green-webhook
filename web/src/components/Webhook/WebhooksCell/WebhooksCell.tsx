@@ -29,10 +29,10 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => {
   return (
-    <div className="">
-      {'No webhooks yet. '}
+    <div>
+      No webhooks yet.{" "}
       <Link to={routes.newWebhook()} className="rw-link">
-        {'Create one?'}
+        Create one?
       </Link>
     </div>
   )

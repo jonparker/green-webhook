@@ -11,6 +11,11 @@
 /**
  * END --- SETUP TAILWINDCSS EDIT
  */
+/* Having a dark background / code editor is far more friendlier to the planet */
+* {
+  background: #121212;
+  color: #fff;
+}
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';

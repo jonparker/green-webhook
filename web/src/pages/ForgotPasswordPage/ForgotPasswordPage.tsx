@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react'
 
 import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
-import { Link, navigate, routes } from '@redwoodjs/router'
+import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import { toast, Toaster } from '@redwoodjs/web/toast'
+import { toast } from '@redwoodjs/web/toast'
 
 import DefaultLayout from 'src/layouts/DefaultLayout/DefaultLayout'
 
@@ -42,44 +42,37 @@ const ForgotPasswordPage = () => {
     <>
       <MetaTags title="Forgot Password" />
       <DefaultLayout>
-        <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="w-full lg:w-1/4">
-          <div className="rw-segment">
-            <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Forgot Password
-              </h2>
-            </header>
-
-            <div className="rw-segment-main">
-              <div className="rw-form-wrapper">
-                <Form onSubmit={onSubmit} className="rw-form-wrapper">
-                  <div className="text-left">
-                    <Label
-                      name="username"
-                      className="rw-label"
-                      errorClassName="rw-label rw-label-error"
-                    >
-                      Email address
-                    </Label>
-                    <TextField
-                      name="username"
-                      className="rw-input"
-                      errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
-                      validation={{
-                        required: true,
-                      }}
-                    />
-
-                    <FieldError name="username" className="rw-field-error" />
-                  </div>
-
-                  <div className="rw-button-group">
-                    <Submit className="rw-button rw-button-blue">Submit</Submit>
-                  </div>
-                </Form>
-              </div>
+          <div className="w-full rounded-lg bg-gray-200 py-8 px-7">
+            <h2 className="bg-gray-200 text-center text-4xl font-bold text-gray-600">
+              Forgot password
+            </h2>
+            <div>
+              <Form onSubmit={onSubmit} className="bg-gray-200">
+                <Label
+                  name="username"
+                  className="rw-label bg-gray-200"
+                  errorClassName="rw-label rw-label-error bg-gray-200"
+                >
+                  Email address
+                </Label>
+                <TextField
+                  name="username"
+                  className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
+                  errorClassName="rw-input rw-input-error bg-gray-200"
+                  ref={usernameRef}
+                  validation={{
+                    required: true,
+                  }}
+                />
+                <FieldError
+                  name="username"
+                  className="rw-field-error bg-gray-200"
+                />
+                <div className='bg-gray-200 mt-2'>
+                  <Submit className="rw-button rw-button-blue">Submit</Submit>
+                </div>
+              </Form>
             </div>
           </div>
         </div>
