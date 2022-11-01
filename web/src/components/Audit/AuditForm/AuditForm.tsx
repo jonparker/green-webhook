@@ -10,9 +10,6 @@ import {
 import type { EditAuditById, UpdateAuditInput } from 'types/graphql'
 import type { RWGqlError } from '@redwoodjs/forms'
 
-
-
-
 type FormAudit = NonNullable<EditAuditById['audit']>
 
 interface AuditFormProps {
@@ -24,13 +21,6 @@ interface AuditFormProps {
 
 const AuditForm = (props: AuditFormProps) => {
   const onSubmit = (data: FormAudit) => {
-  
-    
-    
-  
-    
-    
-  
     props.onSave(data, props?.audit?.id)
   }
 
@@ -43,50 +33,45 @@ const AuditForm = (props: AuditFormProps) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-      
+
         <Label
           name="userId"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
+          className="rw-label bg-gray-200"
+          errorClassName="rw-label rw-label-error bg-gray-200"
         >
           User id
         </Label>
-        
-          <TextField
-            name="userId"
-            defaultValue={props.audit?.userId}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
 
-        <FieldError name="userId" className="rw-field-error" />
+        <TextField
+          name="userId"
+          defaultValue={props.audit?.userId}
+          className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
+          errorClassName="rw-input rw-input-error bg-gray-200"
+          validation={{ required: true }}
+        />
+
+        <FieldError name="userId" className="rw-field-error bg-gray-200" />
 
         <Label
           name="log"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
+          className="rw-label bg-gray-200"
+          errorClassName="rw-label rw-label-error bg-gray-200"
         >
           Log
         </Label>
-        
-          <TextField
-            name="log"
-            defaultValue={props.audit?.log}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
 
-        <FieldError name="log" className="rw-field-error" />
+        <TextField
+          name="log"
+          defaultValue={props.audit?.log}
+          className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
+          errorClassName="rw-input rw-input-error bg-gray-200"
+          validation={{ required: true }}
+        />
 
-        <div className="rw-button-group">
-          <Submit
-            disabled={props.loading}
-            className="rw-button rw-button-blue"
-          >
+        <FieldError name="log" className="rw-field-error bg-gray-200" />
+
+        <div className='bg-gray-200'>
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
             Save
           </Submit>
         </div>
