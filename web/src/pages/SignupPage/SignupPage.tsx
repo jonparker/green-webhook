@@ -72,7 +72,7 @@ const SignupPage = () => {
               <TextField
                 name="username"
                 placeholder="Email address"
-                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none"
+                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none text-gray-600"
                 errorClassName="rw-input rw-input-error bg-gray-200"
                 ref={usernameRef}
                 validation={{
@@ -93,7 +93,7 @@ const SignupPage = () => {
               <PasswordField
                 name="password"
                 placeholder="Password"
-                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none"
+                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none text-gray-600"
                 errorClassName="rw-input rw-input-error bg-gray-200"
                 autoComplete="current-password"
                 validation={{
