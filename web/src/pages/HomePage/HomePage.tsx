@@ -14,14 +14,14 @@ const HomePage = () => {
           </div>
           <div>
             <Link to={routes.signup()}>
-                <ListItem styles='bg-green text-white'>Get started</ListItem>
+                <ListItem styles='bg-green text-black m-0 rounded-lg'>Get started</ListItem>
             </Link>
           </div>
         </div>
         <div className='flex flex-col gap-10'>
           <Card>
             <h2 className='bg-white text-black mb-2 text-3xl font-bold tracking-wide'>What problem are we trying to solve?</h2>
-            <p className='bg-white text-black'><span className='bg-transparent font-bold text-lg text-red-500'>160kg</span> of CO2 is emitted each year by servers whilst processing compute functionality.<br />
+            <p className='bg-white text-black'>
               “On a global level, data centers consume approximately 200 terawatt-hours (TWh) of electricity, or nearly one percent of global electricity demand, while contributing to 0.3% of all global CO2 emissions, according to the International Energy Agency.” <br />
 
               “...data center energy usage in some countries could increase to levels of 15 to 30 percent of their total domestic electricity consumption by the end of the decade.” </p>
