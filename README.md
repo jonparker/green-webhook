@@ -1,6 +1,6 @@
 # Getting Started
 
-1. Create an account at [https://green-webhook.netlify.app/signup](https://green-webhook.netlify.app/signup)
+1. Create an account at [https://greenwebhook.netlify.app/signup](https://greenwebhook.netlify.app/signup)
 2. Click on Webhooks in the menu
 3. Click the "Create Green Webhook" button
 4. Enter a name or alias for your webhook for easy reference for later (optional)
