@@ -70,8 +70,8 @@ const Webhook = ({ webhook }: Props) => {
                   .decode(webhook.destinationEndpoints)
                   .map((location, index) => {
                     return (
-                      <div key={index}>
-                        {location.uri} - (<b>{location.location}</b>)
+                      <div key={index} className="bg-white text-black">
+                        {location.uri} - (<b className='bg-white text-black'> {location.location}</b>)
                       </div>
                     )
                   })}

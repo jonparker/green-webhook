@@ -134,7 +134,7 @@ const WebhookForm = (props: WebhookFormProps) => {
               <input
                 type="button"
                 value="Remove"
-                className='text-gray-600 mt-2 opacity-50 hover:opacity-100 bg-gray-200 hover:cursor-pointer'
+                className='text-white bg-blue-800 mt-2 opacity-70 hover:opacity-100 hover:cursor-pointer bg-gray-200 p-2 rounded-md'
                 onClick={() =>
                   setEndpoints([
                     ...endpoints.filter(
@@ -149,7 +149,7 @@ const WebhookForm = (props: WebhookFormProps) => {
         <input
           type="button"
           value="Add endpoint"
-          className='text-gray-600 mt-2 opacity-50 hover:opacity-100 hover:cursor-pointer bg-gray-200'
+          className='text-white bg-blue-800 mt-2 opacity-70 hover:opacity-100 hover:cursor-pointer bg-gray-200 p-2 rounded-md'
           onClick={() =>
             setEndpoints([
               ...endpoints,

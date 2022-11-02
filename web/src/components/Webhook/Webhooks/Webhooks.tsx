@@ -69,7 +69,7 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
                   .decode(webhook.destinationEndpoints)
                   .map((location, index) => {
                     return (
-                      <div key={index} className="bg-transparent">
+                      <div key={index} className="text-black bg-transparent">
                         {location.uri} - (<b className='bg-transparent text-gray-600'>{location.location}</b>)
                       </div>
                     )
