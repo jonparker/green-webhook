@@ -7,7 +7,7 @@ import { endpointHelper } from 'src/lib/endpointHelper'
 import { logger } from 'src/lib/logger'
 import { forwardWebhook } from 'src/services/forwardWebhook/forwardWebhook'
 
-const cache = new NodeCache({ stdTTL: 60 })
+const cache = new NodeCache()
 
 /**
  * The handler function is your code that processes http request events.
@@ -123,6 +123,38 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
 //     duration?: string
 //   }
 // }
+const getCombination = (allEmissions, delayIndex, durationWindow) => {
+
+  const allEmissionsSize = allEmissions.length
+  
+  if(durationWindow > allEmissionsSize) {
+    // throw error
+  }
+
+  let currentTotalCarbs = 0, bestCurrentTimestamp, minCurrentTotalCarbs = 10000;
+
+  for(let i=0; i<durationWindow; i++) {
+    currentTotalCarbs += allEmissions[i].value
+  }
+
+  if(currentTotalCarbs < minCurrentTotalCarbs) {
+    minCurrentTotalCarbs = currentTotalCarbs
+    bestCurrentTimestamp = allEmissions[0].timestamp
+  }
+
+  for(let i=0, j=durationWindow; i<delayIndex && j<allEmissionsSize; i++, j++) {
+    currentTotalCarbs -= allEmissions[i].value
+    currentTotalCarbs += allEmissions[j].value
+
+    if(currentTotalCarbs < minCurrentTotalCarbs) {
+      minCurrentTotalCarbs = currentTotalCarbs
+      bestCurrentTimestamp = allEmissions[i+1].timestamp
+    }
+  }
+
+  return [bestCurrentTimestamp, minCurrentTotalCarbs]
+}
+
 
 const getLocationWithLowestEmissions = async (locations: string[], maxDelaySeconds: number, lastRecordedDuration: number = 700) => {
   const locationInfo = new Array<LocationInfo>()
@@ -148,61 +180,93 @@ const getLocationWithLowestEmissions = async (locations: string[], maxDelaySecon
 
   let bestLocation, bestTimestamp, minTotalCarbs = 999;
 
+
   for (const location of locations) {
+    
+    if(cache.has(location) === true) {
+      console.log("cache hit for location ", location)
 
-    try {
-      const emissionForecast = await api.getCurrentForecastData(Array.of(location));
-      const currentEmission = await api.getEmissionsDataForLocationByTime(location);
+      let cachedData : {
+        allEmissions,
+        durationWindow,
+        delayIndex,
+        minCurrentTotalCarbs, 
+        bestCurrentTimestamp
+      } = cache.get(location)
 
-      if(emissionForecast.response.statusCode!==200) {
-        throw new Error(
-          `Error message: ${emissionForecast.response.statusMessage}, Status code: ${emissionForecast.response.statusCode}`
-        )
-      }
-      if(currentEmission.response.statusCode!==200) {
-        throw new Error(
-          `Error message: ${currentEmission.response.statusMessage}, Status code: ${currentEmission.response.statusCode}`
-        )
-      }
+      if(cachedData.durationWindow === durationWindow && cachedData.delayIndex === delayIndex) {
+        console.log("cache matched for location ", location)
 
-      const newCurrentEmission = {...currentEmission.body[0], timestamp: currentEmission.body[0].time, value: currentEmission.body[0].rating}
-      delete newCurrentEmission.time
-      delete newCurrentEmission.rating
-
-      const allEmissions = [newCurrentEmission, ...emissionForecast.body[0].forecastData];
-      const allEmissionsSize = allEmissions.length
-
-      if(durationWindow > allEmissionsSize) {
-        throw new Error(
-          `Error message: Forcast not available yet, Status code: 404}`
-        )
-      }
-
-      let currentTotalCarbs = 0;
-
-      for(let i=0; i<durationWindow; i++) {
-        currentTotalCarbs += allEmissions[i].value
-      }
-
-      if(currentTotalCarbs < minTotalCarbs) {
-        minTotalCarbs = currentTotalCarbs
-        bestLocation = location
-        bestTimestamp = allEmissions[0].timestamp
-      }
-
-      for(let i=0, j=durationWindow; i<delayIndex && j<allEmissionsSize; i++, j++) {
-        currentTotalCarbs -= allEmissions[i].value
-        currentTotalCarbs += allEmissions[j].value
-
-        if(currentTotalCarbs < minTotalCarbs) {
-          minTotalCarbs = currentTotalCarbs
+        if(cachedData.minCurrentTotalCarbs < minTotalCarbs) {
+          minTotalCarbs = cachedData.minCurrentTotalCarbs
+          bestTimestamp = cachedData.bestCurrentTimestamp
           bestLocation = location
-          bestTimestamp = allEmissions[i+1].timestamp
         }
       }
+      else {
+        console.log("cache specification not matched for location ", location)
+        const allEmissions = cachedData.allEmissions
 
-    } catch (error) {
-      console.log('Error getting emissions for location', location, error)
+        const [bestCurrentTimestamp, minCurrentTotalCarbs] = getCombination(allEmissions, delayIndex, durationWindow)
+
+        if(minCurrentTotalCarbs < minTotalCarbs) {
+          minTotalCarbs = minCurrentTotalCarbs
+          bestTimestamp = bestCurrentTimestamp
+          bestLocation = location
+        }
+      }
+    }
+    else {
+      console.log("cache Miss for location ", location)
+
+      try {
+        const emissionForecast = await api.getCurrentForecastData(Array.of(location));
+        const currentEmission = await api.getEmissionsDataForLocationByTime(location);
+  
+        if(emissionForecast.response.statusCode!==200) {
+          throw new Error(
+            `Error message: ${emissionForecast.response.statusMessage}, Status code: ${emissionForecast.response.statusCode}`
+          )
+        }
+        if(currentEmission.response.statusCode!==200) {
+          throw new Error(
+            `Error message: ${currentEmission.response.statusMessage}, Status code: ${currentEmission.response.statusCode}`
+          )
+        }
+  
+        const newCurrentEmission = {...currentEmission.body[0], timestamp: currentEmission.body[0].time, value: currentEmission.body[0].rating}
+        delete newCurrentEmission.time
+        delete newCurrentEmission.rating
+  
+        const allEmissions = [newCurrentEmission, ...emissionForecast.body[0].forecastData];
+
+        const [bestCurrentTimestamp, minCurrentTotalCarbs] = getCombination(allEmissions, delayIndex, durationWindow)
+
+        if(minCurrentTotalCarbs < minTotalCarbs) {
+          minTotalCarbs = minCurrentTotalCarbs
+          bestTimestamp = bestCurrentTimestamp
+          bestLocation = location
+        }
+
+        const curr = {
+          allEmissions,
+          durationWindow,
+          delayIndex,
+          minCurrentTotalCarbs, 
+          bestCurrentTimestamp
+        }
+
+        // for 1:42:31
+        // stdttl = 180-31 = 149 seconds (2:29)
+        // hence expiry at 1:45:00
+        const currTime = new Date();
+        cache.set(location, curr, (5 - (currTime.getMinutes() % 5))*60 - currTime.getSeconds())
+        console.log("cache SET for location ", location)
+
+      }
+      catch (error) {
+        console.log('Error getting emissions for location', location, error)
+      }
     }
   }
 
