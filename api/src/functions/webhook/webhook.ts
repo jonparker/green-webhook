@@ -128,7 +128,9 @@ const getCombination = (allEmissions, delayIndex, durationWindow) => {
   const allEmissionsSize = allEmissions.length
   
   if(durationWindow > allEmissionsSize) {
-    // throw error
+    throw new Error(
+      `Error message: Forcast not available yet, Status code: 404}`
+    )
   }
 
   let currentTotalCarbs = 0, bestCurrentTimestamp, minCurrentTotalCarbs = 10000;
@@ -155,31 +157,35 @@ const getCombination = (allEmissions, delayIndex, durationWindow) => {
   return [bestCurrentTimestamp, minCurrentTotalCarbs]
 }
 
-
 const getLocationWithLowestEmissions = async (locations: string[], maxDelaySeconds: number, lastRecordedDuration: number = 700) => {
-  const locationInfo = new Array<LocationInfo>()
+
   const baseUri = process.env.CARBON_AWARE_API_BASE_URI
   if (!baseUri) {
     throw new Error("Missing 'CARBON_AWARE_API_BASE_URI' environment variable")
   }
-  const api = new CarbonAwareApi(baseUri)
 
   const maxDelayTime = {
     hours: (maxDelaySeconds / 3600),
     minutes: (maxDelaySeconds % 3600) / 60,
     seconds: (maxDelaySeconds % 3600) % 60
   }
-  const delayIndex = Math.floor(((Math.floor(maxDelayTime.hours) * 60) + Math.floor(maxDelayTime.minutes)) / 5)
 
   const estimatedTime = {
     hours: (lastRecordedDuration / 3600),
     minutes: (lastRecordedDuration % 3600) / 60,
     seconds: (lastRecordedDuration % 3600) % 60
   }
+
   const durationWindow = Math.ceil(((Math.floor(estimatedTime.hours) * 60) + Math.floor(estimatedTime.minutes)) / 5)
+  console.log("windwo size ",durationWindow)
 
-  let bestLocation, bestTimestamp, minTotalCarbs = 999;
+  // console.log((maxDelayTime.hours * 60) + maxDelayTime.minutes)
+  const delayIndex = Math.floor(((Math.floor(maxDelayTime.hours) * 60) + Math.floor(maxDelayTime.minutes)) / 5)
+  console.log("delay index ", delayIndex);
 
+  let bestLocation, bestTimestamp, minTotalCarbs = 10000;
+
+  const api = new CarbonAwareApi(baseUri)
 
   for (const location of locations) {
     
@@ -204,7 +210,7 @@ const getLocationWithLowestEmissions = async (locations: string[], maxDelaySecon
         }
       }
       else {
-        console.log("cache specification not matched for location ", location)
+        console.log("cache not matched for location ", location)
         const allEmissions = cachedData.allEmissions
 
         const [bestCurrentTimestamp, minCurrentTotalCarbs] = getCombination(allEmissions, delayIndex, durationWindow)
@@ -220,12 +226,12 @@ const getLocationWithLowestEmissions = async (locations: string[], maxDelaySecon
       console.log("cache Miss for location ", location)
 
       try {
-        const emissionForecast = await api.getCurrentForecastData(Array.of(location));
+        const emissionForcast = await api.getCurrentForecastData(Array.of(location));
         const currentEmission = await api.getEmissionsDataForLocationByTime(location);
   
-        if(emissionForecast.response.statusCode!==200) {
+        if(emissionForcast.response.statusCode!==200) {
           throw new Error(
-            `Error message: ${emissionForecast.response.statusMessage}, Status code: ${emissionForecast.response.statusCode}`
+            `Error message: ${emissionForcast.response.statusMessage}, Status code: ${emissionForcast.response.statusCode}`
           )
         }
         if(currentEmission.response.statusCode!==200) {
@@ -238,7 +244,7 @@ const getLocationWithLowestEmissions = async (locations: string[], maxDelaySecon
         delete newCurrentEmission.time
         delete newCurrentEmission.rating
   
-        const allEmissions = [newCurrentEmission, ...emissionForecast.body[0].forecastData];
+        const allEmissions = [newCurrentEmission, ...emissionForcast.body[0].forecastData];
 
         const [bestCurrentTimestamp, minCurrentTotalCarbs] = getCombination(allEmissions, delayIndex, durationWindow)
 
@@ -269,20 +275,15 @@ const getLocationWithLowestEmissions = async (locations: string[], maxDelaySecon
       }
     }
   }
+    const bestCombination = {
+      location: bestLocation,
+      timestamp: bestTimestamp,
+      carbonRatingForDuration: Math.floor(minTotalCarbs/durationWindow)
+    }
+    console.log("Best location is ",bestLocation," at timestamp ",bestTimestamp);
 
-  const bestCombination = {
-    location: bestLocation,
-    timestamp: bestTimestamp,
-    carbonRatingForDuration: Math.floor(minTotalCarbs/durationWindow)
-  }
+    return bestCombination
 
-  console.log("Best location is ",bestLocation," at timestamp ",bestTimestamp);
-
-  // TODO
-  // make type like LocationInfo for bestCombination
-  // make the function as a separate module
-
-  return bestCombination
 }
 
 const invalidWebhookId = () => {
