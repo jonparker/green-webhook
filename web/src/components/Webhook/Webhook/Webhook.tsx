@@ -42,60 +42,59 @@ const Webhook = ({ webhook }: Props) => {
   return (
     <>
       <div className="w-full max-w-7xl rounded-lg bg-gray-200 py-8 px-7">
-        <h2 className="bg-gray-200 text-center text-4xl font-bold mb-4 text-gray-600">
-          Webhook {webhook?.id} details
+        <h2 className="mb-4 bg-gray-200 text-center text-4xl font-bold text-gray-600">
+          Webhook {webhook?.alias || webhook?.id} details
         </h2>
         <table className="rw-table">
           <tbody>
             <tr>
-              <th className='text-black'>Id</th>
-              <td className='text-black'>{webhook.id}</td>
+              <th className="text-black">Id</th>
+              <td className="text-black">{webhook.id}</td>
             </tr>
             <tr>
-              <th className='text-black bg-white'>Alias</th>
-              <td className='text-black'>{webhook.alias}</td>
+              <th className="bg-white text-black">Alias</th>
+              <td className="text-black">{webhook.alias}</td>
             </tr>
             <tr>
-              <th className='text-black'>Created at</th>
-              <td className='text-black'>{timeTag(webhook.createdAt)}</td>
+              <th className="text-black">Created at</th>
+              <td className="text-black">{timeTag(webhook.createdAt)}</td>
             </tr>
             <tr>
-              <th className='text-black bg-white'>Updated at</th>
-              <td className='text-black'>{timeTag(webhook.updatedAt)}</td>
+              <th className="bg-white text-black">Updated at</th>
+              <td className="text-black">{timeTag(webhook.updatedAt)}</td>
             </tr>
             <tr>
-              <th className='text-black'>Destination endpoints</th>
-              <td className='text-black'>
+              <th className="text-black">Destination endpoints</th>
+              <td className="text-black">
                 {endpointHelper
                   .decode(webhook.destinationEndpoints)
                   .map((location, index) => {
                     return (
                       <div key={index} className="bg-white text-black">
-                        {location.uri} - (<b className='bg-white text-black'> {location.location}</b>)
+                        {location.uri} - (
+                        <b className="bg-white text-black">
+                          {' '}
+                          {location.location}
+                        </b>
+                        )
                       </div>
                     )
                   })}
               </td>
             </tr>
             <tr>
-              <th className='text-black bg-white'>Invocation uri</th>
-              <td className='text-black'>{webhook.invocationUri}</td>
+              <th className="bg-white text-black">Invocation uri</th>
+              <td className="text-black">{webhook.invocationUri}</td>
             </tr>
+            <tr></tr>
+            <tr></tr>
             <tr>
-              <th className='text-black'>Max delay seconds</th>
-              <td className='text-black'>{webhook.maxDelaySeconds}</td>
-            </tr>
-            <tr>
-              <th className='text-black bg-white'>Start at</th>
-              <td className='text-black'>{timeTag(webhook.startAt)}</td>
-            </tr>
-            <tr>
-              <th className='text-black'>Invocations</th>
-              <td className='text-black'>{webhook.invocations}</td>
+              <th className="text-black">Invocations</th>
+              <td className="text-black">{webhook.invocations}</td>
             </tr>
           </tbody>
         </table>
-        <div className="w-full mt-4 flex flex-row-reverse justify-between bg-gray-200">
+        <div className="mt-4 flex w-full flex-row-reverse justify-between bg-gray-200">
           <Link
             to={routes.editWebhook({ id: webhook.id })}
             className="rw-button rw-button-blue"
