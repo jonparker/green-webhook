@@ -374,4 +374,6 @@ export const azureRegions = [
     Longitude: '-43.2075',
     RegionName: 'brazilsoutheast',
   },
-].filter((region) => region.Latitude !== null && region.Longitude !== null)
+]
+  .filter((region) => region.Latitude !== null && region.Longitude !== null)
+  .sort((a, b) => a.RegionName.localeCompare(b.RegionName))
