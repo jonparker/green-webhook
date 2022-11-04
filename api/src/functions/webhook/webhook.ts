@@ -190,7 +190,7 @@ const getCombination = (allEmissions, delayIndex, durationWindow) => {
 const getLocationWithLowestEmissions = async (
   locations: string[],
   maxDelaySeconds: number,
-  lastRecordedDuration = 700
+  lastRecordedDuration = 900
 ) => {
   const baseUri = process.env.CARBON_AWARE_API_BASE_URI
   if (!baseUri) {
