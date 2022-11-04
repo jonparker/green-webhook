@@ -9,7 +9,7 @@ import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/Webhook/WebhooksCell'
 import { endpointHelper } from 'src/lib/endpointHelper'
-import {  timeTag, truncate } from 'src/lib/formatters'
+import { timeTag, truncate } from 'src/lib/formatters'
 
 const DELETE_WEBHOOK_MUTATION = gql`
   mutation DeleteWebhookMutation($id: String!) {
@@ -45,15 +45,15 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
       <table className="rw-table">
         <thead>
           <tr>
-            <th className='text-black'>Id</th>
-            <th className='text-black'>Alias</th>
-            <th className='text-black'>Created at</th>
-            <th className='text-black'>Updated at</th>
-            <th className='text-black'>Destination endpoints</th>
-            <th className='text-black'>Invocation uri</th>
-            <th className='text-black'>Max delay seconds</th>
-            <th className='text-black'>Start at</th>
-            <th className='text-black'>Invocations</th>
+            <th className="text-black">Id</th>
+            <th className="text-black">Alias</th>
+            <th className="text-black">Created at</th>
+            <th className="text-black">Updated at</th>
+            <th className="text-black">Destination endpoints</th>
+            <th className="text-black">Invocation uri</th>
+            <th className="text-black">Max Delay Seconds</th>
+            <th className="text-black">Start at</th>
+            <th className="text-black">Invocations</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -69,8 +69,12 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
                   .decode(webhook.destinationEndpoints)
                   .map((location, index) => {
                     return (
-                      <div key={index} className="text-black bg-transparent">
-                        {location.uri} - (<b className='bg-transparent text-gray-600'>{location.location}</b>)
+                      <div key={index} className="bg-transparent text-black">
+                        {location.uri} - (
+                        <b className="bg-transparent text-gray-600">
+                          {location.location}
+                        </b>
+                        )
                       </div>
                     )
                   })}
@@ -80,7 +84,7 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
                   href={`${document.location.protocol}/\/${document.location.hostname}:${document.location.port}/.netlify/functions/webhook/${webhook.id}`}
                   target="_blank"
                   rel="noreferrer"
-                  className='bg-transparent'
+                  className="bg-transparent"
                 >
                   Invocation URI
                 </a>
