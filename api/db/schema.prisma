@@ -51,8 +51,8 @@ model Audit {
 
 model ScheduledInvocation {
   id                 String @id @default(cuid())
-  webhookId          String
-  webhook            Webhook @relation(fields: [webhookId], references: [id])
+  webhookId          String?
+  webhook            Webhook? @relation(fields: [webhookId], references: [id])
   invokeEndpointAt   DateTime
   isCompleted        Boolean
   successfulResponse Boolean

@@ -62,6 +62,18 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
     ) {
       return invalidWebhookId()
     }
+
+    // const getUser = await db.webhook.findUnique({
+    //   where: {
+    //     id: "cla20y6m70027pyzbrge17kpr",
+    //   },
+    //   include: {
+    //     ScheduledInvocations: true,
+    //   },
+    // })
+
+    // console.log("getUser", getUser)
+
     // 3. If found then call Carbon Aware API with locations/time information from webhook.
     // 4. Calculate which endpoint to call or how long to delay calling the endpoint.
     // 5. Call the endpoint with the payload or schedule a delayed call.
@@ -190,7 +202,7 @@ const getCombination = (allEmissions, delayIndex, durationWindow) => {
 const getLocationWithLowestEmissions = async (
   locations: string[],
   maxDelaySeconds: number,
-  lastRecordedDuration = 700
+  lastRecordedDuration = 900
 ) => {
   const baseUri = process.env.CARBON_AWARE_API_BASE_URI
   if (!baseUri) {
