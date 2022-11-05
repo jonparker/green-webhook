@@ -161,7 +161,7 @@ const getCombination = (allEmissions, delayIndex, durationWindow) => {
 
   let currentTotalCarbs = 0,
     bestCurrentTimestamp,
-    minCurrentTotalCarbs = 10000
+    minCurrentTotalCarbs = 100000000
 
   for (let i = 0; i < durationWindow; i++) {
     currentTotalCarbs += allEmissions[i].value
@@ -225,7 +225,7 @@ const getLocationWithLowestEmissions = async (
 
   let bestLocation,
     bestTimestamp,
-    minTotalCarbs = 10000
+    minTotalCarbs = 100000000
 
   const api = new CarbonAwareApi(baseUri)
 
