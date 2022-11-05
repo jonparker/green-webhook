@@ -97,7 +97,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
             endpoint: bestEndpoint,
             queryParams: event.queryStringParameters,
             webhookId: webhook.id,
-            hasEstimate: webhook.hasEstimate
+            hasEstimate: webhook.hasEstimate,
           })
           logger.info(`Endpoint response`, endpointResponse)
 
@@ -121,7 +121,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
               httpMethod: event.httpMethod,
               payload: event.body,
               endpointUri: bestEndpoint,
-              queryParams: event.queryStringParameters.toString(),
+              queryParams: JSON.stringify(event.queryStringParameters),
               invokeEndpointAt: bestTimestamp,
               isCompleted: false,
               successfulResponse: false,

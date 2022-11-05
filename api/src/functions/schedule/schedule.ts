@@ -34,7 +34,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
         payload: schedule.payload,
         endpoint: schedule.endpointUri,
         httpMethod: schedule.httpMethod,
-        queryParams: schedule.queryParams,
+        queryParams: JSON.parse(schedule.queryParams),
       }
 
       const res = await forwardWebhook(webhook)
