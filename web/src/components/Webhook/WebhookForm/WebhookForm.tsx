@@ -183,7 +183,7 @@ const WebhookForm = (props: WebhookFormProps) => {
       </Label>
       <NumberField
         name="estimatedTime"
-        defaultValue={props.webhook?.estimatedTime}
+        defaultValue={props.webhook?.hasEstimate===true ? props.webhook?.estimatedTime : null}
         validation = {{
           min: 0,
           max: 86399

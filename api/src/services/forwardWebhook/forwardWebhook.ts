@@ -1,6 +1,7 @@
 import got from 'got'
 
 import { logger } from 'src/lib/logger'
+import { db } from 'src/lib/db'
 
 export const forwardWebhook = async ({
   payload,
@@ -8,15 +9,21 @@ export const forwardWebhook = async ({
   httpMethod,
   secret,
   queryParams,
+  webhookId,
+  hasEstimate
 }: {
   payload: string
   endpoint: string
   httpMethod: string
   secret?: string
   queryParams: any
+  webhookId: string
+  hasEstimate: boolean
 }) => {
   try {
     logger.info(`Calling ${endpoint} with method ${httpMethod}`)
+
+    const startTime = new Date().getTime();
 
     const forwardResponse =
       httpMethod === 'POST'
@@ -31,6 +38,17 @@ export const forwardWebhook = async ({
             responseType: 'json',
             query: queryParams,
           })
+
+    const endTime = new Date().getTime();
+
+    if(hasEstimate === false) {
+      await db.webhook.update({
+        where: { id: webhookId },
+          data: {
+            lastRecordedDuration: endTime - startTime
+          },
+      })
+    }
 
     return {
       statusCode: 200,

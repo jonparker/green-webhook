@@ -29,6 +29,7 @@ export const createWebhook: MutationResolvers['createWebhook'] = ({
   const data = {
     ...input,
     createdById,
+    ...(input.hasEstimate===false && {estimatedTime: 300})
   }
   return db.webhook.create({
     data,
@@ -46,8 +47,12 @@ export const updateWebhook: MutationResolvers['updateWebhook'] = ({
   if (!webhook) {
     throw new Error(`You don't have permission to update this webhook`)
   }
+  const data = {
+    ...input,
+    ...(input.hasEstimate===false && {estimatedTime: 300})
+  }
   return db.webhook.update({
-    data: input,
+    data,
     where: { id },
   })
 }

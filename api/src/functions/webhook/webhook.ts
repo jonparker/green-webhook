@@ -95,6 +95,8 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
             payload: event.body,
             endpoint: bestEndpoint,
             queryParams: event.queryStringParameters,
+            webhookId: webhook.id,
+            hasEstimate: webhook.hasEstimate
           })
           logger.info(`Endpoint response`, endpointResponse)
 
