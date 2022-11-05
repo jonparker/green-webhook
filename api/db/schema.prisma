@@ -61,5 +61,6 @@ model ScheduledInvocation {
   payload            String
   httpMethod         String
   queryParams        String
+  headers            String
 }
 

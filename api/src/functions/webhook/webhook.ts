@@ -102,6 +102,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
             queryParams: event.queryStringParameters,
             webhookId: webhook.id,
             hasEstimate: webhook.hasEstimate,
+            headers: event.headers,
           })
           logger.info(`Endpoint response`, endpointResponse)
 
@@ -129,13 +130,14 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
               invokeEndpointAt: bestTimestamp,
               isCompleted: false,
               successfulResponse: false,
+              headers: JSON.stringify(event.headers),
             },
           })
           return successfulResponse({
             statusCode: 200,
             status: `SCHEDULED`,
             message: `Scheduled on LOCATION ${bestLocation} at TIMESTAMP ${bestTimestamp}`,
-            carbonAware: `estimated Average carbon rating is ${carbsEmission}`
+            carbonAware: `estimated Average carbon rating is ${carbsEmission}`,
           })
         }
       } else {
