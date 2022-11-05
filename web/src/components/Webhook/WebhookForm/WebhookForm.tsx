@@ -45,11 +45,12 @@ const WebhookForm = (props: WebhookFormProps) => {
 
     let hasEstimate = true;
 
-    console.log('-----------adsjweqjnmqwhjewhbefn-------------------------------------');
-    console.log(data.estimatedTime)
-    if(data.estimatedTime === 0 || isNaN(estimatedTime)) {
+    console.log(typeof(data.estimatedTime))
+    if(data.estimatedTime === 0 || isNaN(data.estimatedTime)) {
       hasEstimate = false
     }
+
+    console.log(hasEstimate)
 
     props.onSave(
       {
@@ -183,7 +184,7 @@ const WebhookForm = (props: WebhookFormProps) => {
       </Label>
       <NumberField
         name="estimatedTime"
-        defaultValue={props.webhook?.hasEstimate===true ? props.webhook?.estimatedTime : null}
+        defaultValue={props.webhook?.estimatedTime}
         validation = {{
           min: 0,
           max: 86399
