@@ -46,6 +46,15 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
           successfulResponse: res?.statusCode === 200 || res.statusCode === 201,
         },
       })
+
+      await db.webhook.update({
+        where: { id: schedule.webhookId },
+        data: {
+          invocations: {
+            increment: 1,
+          },
+        },
+      })
     }
   } catch (error) {
     logger.error('Error in scheduledWebhooks', { error })
