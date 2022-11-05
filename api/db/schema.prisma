@@ -20,11 +20,12 @@ model Webhook {
   destinationEndpoints String
   invocationUri String
   maxDelaySeconds Int?
-  startAt DateTime?
   invocations Int
   isEnabled Boolean
   isArchived Boolean
   isDeleted Boolean
+  hasEstimate Boolean
+  estimatedTime Int?
   ScheduledInvocations ScheduledInvocation[]
 }
 

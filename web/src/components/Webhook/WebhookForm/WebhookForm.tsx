@@ -42,6 +42,15 @@ const WebhookForm = (props: WebhookFormProps) => {
   )
 
   const onSubmit = (data: FormWebhook) => {
+
+    let hasEstimate = true;
+
+    console.log('-----------adsjweqjnmqwhjewhbefn-------------------------------------');
+    console.log(data.estimatedTime)
+    if(data.estimatedTime === 0 || isNaN(estimatedTime)) {
+      hasEstimate = false
+    }
+
     props.onSave(
       {
         ...data,
@@ -51,6 +60,7 @@ const WebhookForm = (props: WebhookFormProps) => {
         isEnabled: true,
         isDeleted: false,
         isArchived: false,
+        hasEstimate
       },
       props?.webhook?.id
     )
@@ -156,25 +166,32 @@ const WebhookForm = (props: WebhookFormProps) => {
       <NumberField
         name="maxDelaySeconds"
         defaultValue={props.webhook?.maxDelaySeconds}
+        validation = {{
+          min: 0,
+          max: 86399
+        }}
         className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
         errorClassName="rw-input rw-input-error"
       />
       <FieldError name="maxDelaySeconds" className="rw-field-error" />
       <Label
-        name="startAt"
+        name="estimatedTime"
         className="rw-label bg-gray-200"
         errorClassName="rw-label rw-label-error bg-gray-200"
       >
-        Start at
+        Estimated Processing Time
       </Label>
-      <DatetimeLocalField
-        name="startAt"
-        defaultValue={formatDatetime(props.webhook?.startAt)}
-        className="mt-2 mb-4 rounded-lg bg-gray-200 py-2 text-gray-600 opacity-50 hover:cursor-pointer hover:opacity-100"
-        errorClassName="rw-input rw-input-error bg-gray-200"
+      <NumberField
+        name="estimatedTime"
+        defaultValue={props.webhook?.estimatedTime}
+        validation = {{
+          min: 0,
+          max: 86399
+        }}
+        className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
+        errorClassName="rw-input rw-input-error"
       />
-      <FieldError name="startAt" className="rw-field-error bg-gray-200" />
-
+      <FieldError name="estimatedTime" className="rw-field-error" />
       <input
         type="button"
         value="Add endpoint"
