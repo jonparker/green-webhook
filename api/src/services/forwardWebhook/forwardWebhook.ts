@@ -8,14 +8,12 @@ export const forwardWebhook = async ({
   httpMethod,
   secret,
   queryParams,
-  headers,
 }: {
   payload: string
   endpoint: string
   httpMethod: string
   secret?: string
   queryParams: any
-  headers: { [key: string]: string }
 }) => {
   try {
     logger.info(`Calling ${endpoint} with method ${httpMethod}`)
@@ -24,10 +22,6 @@ export const forwardWebhook = async ({
       httpMethod === 'POST'
         ? await got.post(endpoint, {
             responseType: 'json',
-            headers: {
-              'X-Green-Webhook-Signature': secret,
-              ...headers,
-            },
             json: {
               payload,
             },
@@ -35,10 +29,6 @@ export const forwardWebhook = async ({
           })
         : await got.get(endpoint, {
             responseType: 'json',
-            headers: {
-              'X-Green-Webhook-Signature': secret,
-              ...headers,
-            },
             query: queryParams,
           })
 
