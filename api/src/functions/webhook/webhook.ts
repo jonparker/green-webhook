@@ -70,6 +70,8 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
 
       let bestEndpoint = null
       let bestTimestamp = null
+      let bestLocation = null
+      let carbsEmission = null
 
       if (webhook.maxDelaySeconds < 0) {
         return invalidWebhookId()
@@ -87,6 +89,8 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
         )
         bestEndpoint = foundBestEndpoint.uri
         bestTimestamp = bestLocationInfo.timestamp
+        bestLocation = bestLocationInfo.location
+        carbsEmission = bestLocationInfo.carbonRatingForDuration
       }
 
       if (bestEndpoint !== null) {
@@ -129,7 +133,9 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
           })
           return successfulResponse({
             statusCode: 200,
-            message: 'Scheduled',
+            status: `SCHEDULED`,
+            message: `Scheduled on LOCATION ${bestLocation} at TIMESTAMP ${bestTimestamp}`,
+            carbonAware: `estimated Average carbon rating is ${carbsEmission}`
           })
         }
       } else {
@@ -161,7 +167,7 @@ const getCombination = (allEmissions, delayIndex, durationWindow) => {
 
   let currentTotalCarbs = 0,
     bestCurrentTimestamp,
-    minCurrentTotalCarbs = 10000
+    minCurrentTotalCarbs = 1000000000
 
   for (let i = 0; i < durationWindow; i++) {
     currentTotalCarbs += allEmissions[i].value
@@ -225,7 +231,7 @@ const getLocationWithLowestEmissions = async (
 
   let bestLocation,
     bestTimestamp,
-    minTotalCarbs = 10000
+    minTotalCarbs = 1000000000
 
   const api = new CarbonAwareApi(baseUri)
 
