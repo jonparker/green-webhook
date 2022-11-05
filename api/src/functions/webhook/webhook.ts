@@ -78,7 +78,8 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
         const locations = endpoints.map((e) => e.location)
         const bestLocationInfo = await getLocationWithLowestEmissions(
           locations,
-          webhook.maxDelaySeconds
+          webhook.maxDelaySeconds,
+          webhook.estimatedTime
         )
         logger.info('Best endpoint is', bestLocationInfo)
         const foundBestEndpoint = endpoints.find(
@@ -95,6 +96,8 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
             payload: event.body,
             endpoint: bestEndpoint,
             queryParams: event.queryStringParameters,
+            webhookId: webhook.id,
+            hasEstimate: webhook.hasEstimate
           })
           logger.info(`Endpoint response`, endpointResponse)
 
@@ -189,7 +192,7 @@ const getCombination = (allEmissions, delayIndex, durationWindow) => {
 const getLocationWithLowestEmissions = async (
   locations: string[],
   maxDelaySeconds: number,
-  lastRecordedDuration = 900
+  lastRecordedDuration: number
 ) => {
   const baseUri = process.env.CARBON_AWARE_API_BASE_URI
   if (!baseUri) {

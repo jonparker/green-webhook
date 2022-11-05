@@ -45,11 +45,12 @@ const WebhookForm = (props: WebhookFormProps) => {
 
     let hasEstimate = true;
 
-    console.log('-----------adsjweqjnmqwhjewhbefn-------------------------------------');
-    console.log(data.estimatedTime)
-    if(data.estimatedTime === 0 || isNaN(estimatedTime)) {
+    console.log(typeof(data.estimatedTime))
+    if(data.estimatedTime === 0 || isNaN(data.estimatedTime)) {
       hasEstimate = false
     }
+
+    console.log(hasEstimate)
 
     props.onSave(
       {
