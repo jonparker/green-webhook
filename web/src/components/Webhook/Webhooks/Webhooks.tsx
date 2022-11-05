@@ -52,7 +52,7 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
             <th className="text-black">Destination endpoints</th>
             <th className="text-black">Invocation uri</th>
             <th className="text-black">Max Delay Seconds</th>
-            <th className="text-black">Start at</th>
+            <th className="text-black">Estimated Time</th>
             <th className="text-black">Invocations</th>
             <th>&nbsp;</th>
           </tr>
@@ -90,7 +90,7 @@ const WebhooksList = ({ webhooks }: FindWebhooks) => {
                 </a>
               </td>
               <td>{truncate(webhook.maxDelaySeconds)}</td>
-              <td>{timeTag(webhook.startAt)}</td>
+              <td>{truncate(webhook.estimatedTime)}</td>
               <td>{truncate(webhook.invocations)}</td>
               <td>
                 <nav className="rw-table-actions bg-transparent">

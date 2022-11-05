@@ -9,11 +9,12 @@ export const schema = gql`
     destinationEndpoints: String!
     invocationUri: String!
     maxDelaySeconds: Int
-    startAt: DateTime
     invocations: Int!
     isEnabled: Boolean!
     isArchived: Boolean!
     isDeleted: Boolean!
+    hasEstimate: Boolean!
+    estimatedTime: Int
   }
 
   type Query {
@@ -27,11 +28,12 @@ export const schema = gql`
     destinationEndpoints: String!
     invocationUri: String!
     maxDelaySeconds: Int
-    startAt: DateTime
     invocations: Int!
     isEnabled: Boolean!
     isArchived: Boolean!
     isDeleted: Boolean!
+    hasEstimate: Boolean!
+    estimatedTime: Int
   }
 
   input UpdateWebhookInput {
@@ -40,11 +42,12 @@ export const schema = gql`
     destinationEndpoints: String
     invocationUri: String
     maxDelaySeconds: Int
-    startAt: DateTime
     invocations: Int
     isEnabled: Boolean
     isArchived: Boolean
     isDeleted: Boolean
+    hasEstimate: Boolean!
+    estimatedTime: Int
   }
 
   type Mutation {

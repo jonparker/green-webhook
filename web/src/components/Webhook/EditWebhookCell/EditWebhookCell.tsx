@@ -18,11 +18,12 @@ export const QUERY = gql`
       destinationEndpoints
       invocationUri
       maxDelaySeconds
-      startAt
       invocations
       isEnabled
       isArchived
       isDeleted
+      estimatedTime
+      hasEstimate
     }
   }
 `
@@ -37,11 +38,12 @@ const UPDATE_WEBHOOK_MUTATION = gql`
       destinationEndpoints
       invocationUri
       maxDelaySeconds
-      startAt
       invocations
       isEnabled
       isArchived
       isDeleted
+      estimatedTime
+      hasEstimate
     }
   }
 `

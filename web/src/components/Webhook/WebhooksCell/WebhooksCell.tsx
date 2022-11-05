@@ -16,11 +16,12 @@ export const QUERY = gql`
       destinationEndpoints
       invocationUri
       maxDelaySeconds
-      startAt
       invocations
       isEnabled
       isArchived
       isDeleted
+      hasEstimate
+      estimatedTime
     }
   }
 `

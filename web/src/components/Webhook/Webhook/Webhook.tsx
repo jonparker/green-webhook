@@ -91,8 +91,8 @@ const Webhook = ({ webhook }: Props) => {
               <td className="text-black">{webhook.maxDelaySeconds}</td>
             </tr>
             <tr>
-              <th className="bg-white text-black">Start at</th>
-              <td className="text-black">{timeTag(webhook.startAt)}</td>
+              <th className="text-black">Estimated Time</th>
+              <td className="text-black">{webhook.estimatedTime}</td>
             </tr>
             <tr>
               <th className="text-black">Invocations</th>
