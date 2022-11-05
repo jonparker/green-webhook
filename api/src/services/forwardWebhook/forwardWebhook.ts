@@ -45,7 +45,7 @@ export const forwardWebhook = async ({
       await db.webhook.update({
         where: { id: webhookId },
           data: {
-            lastRecordedDuration: endTime - startTime
+            estimatedTime: endTime - startTime
           },
       })
     }

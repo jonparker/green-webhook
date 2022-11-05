@@ -78,7 +78,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
         const locations = endpoints.map((e) => e.location)
         const bestLocationInfo = await getLocationWithLowestEmissions(
           locations,
-          webhook.maxDelaySeconds
+          webhook.maxDelaySeconds,
           webhook.estimatedTime
         )
         logger.info('Best endpoint is', bestLocationInfo)
