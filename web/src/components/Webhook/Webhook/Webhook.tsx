@@ -91,7 +91,7 @@ const Webhook = ({ webhook }: Props) => {
               <td className="text-black">{webhook.maxDelaySeconds}</td>
             </tr>
             <tr>
-              <th className="text-black">Estimated Time</th>
+              <th className="bg-white text-black">Estimated Time</th>
               <td className="text-black">{webhook.estimatedTime}</td>
             </tr>
             <tr>
