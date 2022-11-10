@@ -35,15 +35,17 @@ export const handler = async (
       `,
       })
       if (res && res.accepted) {
-        await createAudit({
+        createAudit({
           input: {
             user: { connect: { id: user.id } },
             log: 'Reset password email sent',
           },
         })
-        return user
+        return {
+          email: user.email,
+        }
       } else {
-        await createAudit({
+        createAudit({
           input: {
             user: { connect: { id: user.id } },
             log: 'Reset password email failed',

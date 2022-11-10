@@ -16,14 +16,14 @@ export async function sendEmail({ to, subject, text, html }: Options) {
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
-      user: 'YourEmail@example.com',
+      user: process.env.SEND_IN_BLUE_EMAIL,
       pass: process.env.SEND_IN_BLUE_KEY,
     },
   })
 
   // send mail with defined transport object
   const info = await transporter.sendMail({
-    from: '"Green Webhook No Reply" <YourEmail@Example.com>',
+    from: `"Green Webhook No Reply" <${process.env.SEND_IN_BLUE_EMAIL}>`,
     to: Array.isArray(to) ? to : [to], // list of receivers
     subject, // Subject line
     text, // plain text body

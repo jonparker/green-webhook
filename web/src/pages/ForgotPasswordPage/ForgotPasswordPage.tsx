@@ -69,7 +69,7 @@ const ForgotPasswordPage = () => {
                   name="username"
                   className="rw-field-error bg-gray-200"
                 />
-                <div className='bg-gray-200 mt-2'>
+                <div className="mt-2 bg-gray-200">
                   <Submit className="rw-button rw-button-blue">Submit</Submit>
                 </div>
               </Form>
