@@ -10,7 +10,9 @@ import {
 } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import { toast, Toaster } from '@redwoodjs/web/toast'
+import { toast } from '@redwoodjs/web/toast'
+
+import DefaultLayout from 'src/layouts/DefaultLayout/DefaultLayout'
 
 const ResetPasswordPage = ({ resetToken }: { resetToken: string }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
@@ -58,61 +60,57 @@ const ResetPasswordPage = ({ resetToken }: { resetToken: string }) => {
 
   return (
     <>
-      <MetaTags title="Reset Password" />
+      <DefaultLayout>
+        <MetaTags title="Reset Password" />
 
-      <main className="rw-main">
-        <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-        <div className="rw-scaffold rw-login-container">
-          <div className="rw-segment">
-            <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Reset Password
-              </h2>
-            </header>
+        <div className="w-full lg:w-1/4">
+          <div className="w-full rounded-lg bg-gray-200 py-8 px-7">
+            <h2 className="bg-gray-200 text-center text-4xl font-bold text-gray-600">
+              Reset password
+            </h2>
 
-            <div className="rw-segment-main">
-              <div className="rw-form-wrapper">
-                <Form onSubmit={onSubmit} className="rw-form-wrapper">
-                  <div className="text-left">
-                    <Label
-                      name="password"
-                      className="rw-label"
-                      errorClassName="rw-label rw-label-error"
-                    >
-                      New Password
-                    </Label>
-                    <PasswordField
-                      name="password"
-                      autoComplete="new-password"
-                      className="rw-input"
-                      errorClassName="rw-input rw-input-error"
-                      disabled={!enabled}
-                      ref={passwordRef}
-                      validation={{
-                        required: {
-                          value: true,
-                          message: 'Password is required',
-                        },
-                      }}
-                    />
+            <div>
+              <Form onSubmit={onSubmit} className="bg-gray-200">
+                <Label
+                  name="password"
+                  className="rw-label bg-gray-200"
+                  errorClassName="rw-label rw-label-error bg-gray-200"
+                >
+                  New Password
+                </Label>
+                <PasswordField
+                  name="password"
+                  autoComplete="new-password"
+                  className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
+                  errorClassName="rw-input rw-input-error bg-gray-200"
+                  disabled={!enabled}
+                  ref={passwordRef}
+                  validation={{
+                    required: {
+                      value: true,
+                      message: 'Password is required',
+                    },
+                  }}
+                />
 
-                    <FieldError name="password" className="rw-field-error" />
-                  </div>
+                <FieldError
+                  name="password"
+                  className="rw-field-error bg-gray-200"
+                />
 
-                  <div className="rw-button-group">
-                    <Submit
-                      className="rw-button rw-button-blue"
-                      disabled={!enabled}
-                    >
-                      Submit
-                    </Submit>
-                  </div>
-                </Form>
-              </div>
+                <div className="mt-2 bg-gray-200">
+                  <Submit
+                    className="rw-button rw-button-blue"
+                    disabled={!enabled}
+                  >
+                    Submit
+                  </Submit>
+                </div>
+              </Form>
             </div>
           </div>
         </div>
-      </main>
+      </DefaultLayout>
     </>
   )
 }
