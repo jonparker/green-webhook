@@ -19,9 +19,6 @@ const Navigation: React.FC<NavProps> = ({ buttonLabel, buttonTo }) => {
         <Link to={routes.home()} className="bg-green">
           <ListItem>Home</ListItem>
         </Link>
-        {/* <Link to={routes.about()} className="bg-green">
-          <ListItem>About</ListItem>
-        </Link> */}
         {hasRole('admin') && (
           <Link to={routes.users()} className="bg-green">
             <ListItem>Admin</ListItem>
@@ -36,7 +33,7 @@ const Navigation: React.FC<NavProps> = ({ buttonLabel, buttonTo }) => {
               <ListItem>Logout</ListItem>
             </button>
             {buttonLabel ? (
-              <Link to={routes[`${buttonTo}`]()} className="bg-green" >
+              <Link to={routes[`${buttonTo}`]()} className="bg-green">
                 <ListItem styles="bg-emerald-800 text-white">
                   + {buttonLabel}
                 </ListItem>
@@ -55,11 +52,19 @@ const Navigation: React.FC<NavProps> = ({ buttonLabel, buttonTo }) => {
         )}
         <a
           href="https://green-webhook.gitbook.io/green-webhook/"
-          rel="noreferrer"
           target="_blank"
-          className='bg-green'
+          className="bg-green"
+          rel="noreferrer"
         >
-           <ListItem>Docs ↗️</ListItem>
+          <ListItem>Docs ↗️</ListItem>
+        </a>
+        <a
+          href="https://github.com/jonparker/green-webhook"
+          target="_blank"
+          className="bg-green"
+          rel="noreferrer"
+        >
+          <ListItem>Github ↗️</ListItem>
         </a>
       </ul>
     </nav>
