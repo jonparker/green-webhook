@@ -28,10 +28,10 @@ export const handler = async (
       const res = await sendEmail({
         to: user.email,
         subject: 'Reset your password',
-        text: `You can reset your password by clicking here: ${process.env.BASE_URL}/reset-password?resetToken=${user.resetToken}`,
+        text: `You can reset your password by clicking here: ${process.env.DEPLOY_URL}/reset-password?resetToken=${user.resetToken}`,
         html: `
         <p>Click the link below to reset your password.</p>
-        <a href="${process.env.BASE_URL}/reset-password?resetToken=${user.resetToken}">Reset your password</a>
+        <a href="${process.env.DEPLOY_URL}/reset-password?resetToken=${user.resetToken}">Reset your password</a>
       `,
       })
       if (res && res.accepted) {
