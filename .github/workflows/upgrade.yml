@@ -1,0 +1,220 @@
+name: Automated Monorepo Upgrades with Claude Code
+
+on:
+schedule:
+# Run weekly on Mondays at 9 AM UTC
+- cron: ‘0 9 * * 1’
+workflow_dispatch:
+inputs:
+upgrade_type:
+description: ‘Type of upgrade to perform’
+required: true
+default: ‘minor’
+type: choice
+options:
+- patch
+- minor
+- major
+packages:
+description: ‘Specific packages to upgrade (comma-separated, leave empty for all)’
+required: false
+type: string
+
+env:
+NODE_VERSION: ‘20’
+ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+jobs:
+upgrade-dependencies:
+runs-on: ubuntu-latest
+permissions:
+contents: write
+pull-requests: write
+
+```
+steps:
+- name: Checkout repository
+  uses: actions/checkout@v4
+  with:
+    token: ${{ secrets.GITHUB_TOKEN }}
+    fetch-depth: 0
+
+- name: Setup Node.js
+  uses: actions/setup-node@v4
+  with:
+    node-version: ${{ env.NODE_VERSION }}
+    cache: 'npm'
+
+- name: Install dependencies
+  run: npm ci
+
+- name: Install Claude Code
+  run: npm install -g @anthropic-ai/claude-code
+
+- name: Configure Git
+  run: |
+    git config --global user.name 'github-actions[bot]'
+    git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+- name: Create upgrade branch
+  run: |
+    BRANCH_NAME="automated-upgrades-$(date +%Y%m%d-%H%M%S)"
+    echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+    git checkout -b $BRANCH_NAME
+
+- name: Run Claude Code for dependency upgrades
+  run: |
+    claude -p "
+    I need you to upgrade dependencies in this TypeScript monorepo following these guidelines:
+
+    **Project Structure Analysis:**
+    - This is a monorepo with React frontend and Node.js backend packages
+    - Analyze the workspace structure in package.json and identify all workspaces
+    - Check for lerna.json, nx.json, or other monorepo configuration files
+
+    **Upgrade Strategy (${{ github.event.inputs.upgrade_type || 'minor' }} upgrades):**
+    1. First, run 'npm outdated --workspaces' to see available updates
+    2. Focus on ${{ github.event.inputs.upgrade_type || 'minor' }} version upgrades only
+    3. Prioritize security updates regardless of version type
+    4. Keep major versions consistent across workspaces where packages are shared
+
+    **Specific Package Focus:**
+    ${{ github.event.inputs.packages && format('- Only upgrade these packages: {0}', github.event.inputs.packages) || '- Upgrade all outdated packages following the version strategy above' }}
+
+    **Critical Requirements:**
+    - Update package.json files in all workspaces
+    - Run 'npm install' after changes to update lock files
+    - Check for TypeScript compatibility issues after upgrades
+    - Run existing tests to ensure nothing breaks
+    - Look for any breaking changes in changelogs of upgraded packages
+    - Update @types/* packages to match their corresponding runtime packages
+
+    **Testing & Validation:**
+    - Run 'npm run build' in all workspaces to check for build issues
+    - Run 'npm run test' if tests exist
+    - Run 'npm run type-check' or 'tsc --noEmit' to validate TypeScript
+    - Check for any ESLint or Prettier configuration that needs updating
+
+    **Documentation:**
+    - Create or update CHANGELOG.md with the changes made
+    - Document any breaking changes or manual steps needed
+    - List all upgraded packages with their version changes
+
+    Please proceed step by step, asking for confirmation before making major changes.
+    " --max-turns 20
+
+- name: Verify changes and run tests
+  run: |
+    echo "=== Checking for changes ==="
+    git status
+    
+    echo "=== Running build verification ==="
+    npm run build --workspaces --if-present
+    
+    echo "=== Running tests ==="
+    npm run test --workspaces --if-present
+    
+    echo "=== TypeScript validation ==="
+    npx tsc --noEmit --skipLibCheck
+
+- name: Commit and push changes
+  run: |
+    if [[ -n $(git status --porcelain) ]]; then
+      git add .
+      git commit -m "chore: automated dependency upgrades (${{ github.event.inputs.upgrade_type || 'minor' }})
+      
+      Automated upgrades performed by Claude Code:
+      - Upgrade type: ${{ github.event.inputs.upgrade_type || 'minor' }}
+      - Packages: ${{ github.event.inputs.packages || 'all outdated packages' }}
+      - Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+      
+      This PR was created automatically. Please review the changes and test thoroughly before merging."
+      
+      git push origin $BRANCH_NAME
+      echo "CHANGES_MADE=true" >> $GITHUB_ENV
+    else
+      echo "No changes to commit"
+      echo "CHANGES_MADE=false" >> $GITHUB_ENV
+    fi
+
+- name: Create Pull Request
+  if: env.CHANGES_MADE == 'true'
+  uses: gh/gh-cli@v2
+  with:
+    token: ${{ secrets.GITHUB_TOKEN }}
+  run: |
+    gh pr create \
+      --title "🤖 Automated Dependency Upgrades (${{ github.event.inputs.upgrade_type || 'minor' }})" \
+      --body "## Automated Dependency Upgrades
+
+    This PR contains automated dependency upgrades performed by Claude Code.
+
+    ### Upgrade Details
+    - **Upgrade Type**: ${{ github.event.inputs.upgrade_type || 'minor' }}
+    - **Target Packages**: ${{ github.event.inputs.packages || 'All outdated packages' }}
+    - **Triggered**: ${{ github.event_name == 'schedule' && 'Scheduled run' || 'Manual trigger' }}
+    - **Timestamp**: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+    ### What was done
+    - ✅ Analyzed monorepo structure
+    - ✅ Updated package.json files across workspaces  
+    - ✅ Updated lock files
+    - ✅ Verified TypeScript compatibility
+    - ✅ Ran build verification
+    - ✅ Executed test suites
+
+    ### Manual Review Required
+    - [ ] Review changelog entries for breaking changes
+    - [ ] Test critical user flows
+    - [ ] Verify deployment pipeline compatibility
+    - [ ] Check for any runtime behavior changes
+
+    ### Auto-generated by
+    - Workflow: \`${{ github.workflow }}\`
+    - Run ID: \`${{ github.run_id }}\`
+    - Claude Code with ${{ github.event.inputs.upgrade_type || 'minor' }} upgrade strategy
+
+    ---
+    🤖 This PR was created automatically. Human review and approval required before merging." \
+      --head $BRANCH_NAME \
+      --base main \
+      --label "dependencies,automated,claude-code"
+
+- name: Post summary
+  run: |
+    echo "## Upgrade Summary" >> $GITHUB_STEP_SUMMARY
+    echo "- Branch created: \`$BRANCH_NAME\`" >> $GITHUB_STEP_SUMMARY
+    echo "- Upgrade type: ${{ github.event.inputs.upgrade_type || 'minor' }}" >> $GITHUB_STEP_SUMMARY
+    echo "- Changes made: $CHANGES_MADE" >> $GITHUB_STEP_SUMMARY
+    if [[ "$CHANGES_MADE" == "true" ]]; then
+      echo "- Pull request created successfully" >> $GITHUB_STEP_SUMMARY
+    else
+      echo "- No updates available" >> $GITHUB_STEP_SUMMARY
+    fi
+```
+
+notify-failure:
+runs-on: ubuntu-latest
+needs: upgrade-dependencies
+if: failure()
+steps:
+- name: Notify on failure
+uses: actions/github-script@v7
+with:
+script: |
+github.rest.issues.create({
+owner: context.repo.owner,
+repo: context.repo.repo,
+title: ‘🚨 Automated Dependency Upgrade Failed’,
+body: `The automated dependency upgrade workflow failed.
+
+```
+        **Details:**
+        - Workflow run: ${context.runId}
+        - Triggered by: ${context.eventName}
+        - Failed job: upgrade-dependencies
+        
+        Please check the workflow logs and address any issues.`,
+        labels: ['bug', 'automated', 'dependencies']
+      });
+```
