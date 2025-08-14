@@ -29,7 +29,7 @@ export const createWebhook: MutationResolvers['createWebhook'] = ({
   const data = {
     ...input,
     createdById,
-    ...(input.hasEstimate===false && {estimatedTime: 300})
+    ...(input.hasEstimate === false && { estimatedTime: 300 }),
   }
   return db.webhook.create({
     data,
@@ -49,7 +49,7 @@ export const updateWebhook: MutationResolvers['updateWebhook'] = ({
   }
   const data = {
     ...input,
-    ...(input.hasEstimate===false && {estimatedTime: 300})
+    ...(input.hasEstimate === false && { estimatedTime: 300 }),
   }
   return db.webhook.update({
     data,

@@ -53,7 +53,7 @@ const SignupPage = () => {
             <h2 className="bg-gray-200 text-center text-4xl font-bold text-gray-600">
               Create account
             </h2>
-            <div className="bg-gray-200 mt-3 w-full text-center">
+            <div className="mt-3 w-full bg-gray-200 text-center">
               <span className="bg-gray-200 text-base font-medium text-gray-500">
                 Already have an account?
               </span>{' '}
@@ -72,7 +72,7 @@ const SignupPage = () => {
               <TextField
                 name="username"
                 placeholder="Email address"
-                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none text-gray-600"
+                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
                 errorClassName="rw-input rw-input-error bg-gray-200"
                 ref={usernameRef}
                 validation={{
@@ -82,7 +82,10 @@ const SignupPage = () => {
                   },
                 }}
               />
-              <FieldError name="username" className="rw-field-error bg-gray-200" />
+              <FieldError
+                name="username"
+                className="rw-field-error bg-gray-200"
+              />
               <Label
                 name="password"
                 className="rw-label bg-gray-200"
@@ -93,7 +96,7 @@ const SignupPage = () => {
               <PasswordField
                 name="password"
                 placeholder="Password"
-                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none text-gray-600"
+                className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
                 errorClassName="rw-input rw-input-error bg-gray-200"
                 autoComplete="current-password"
                 validation={{
@@ -103,7 +106,10 @@ const SignupPage = () => {
                   },
                 }}
               />
-              <FieldError name="password" className="rw-field-error bg-gray-200" />
+              <FieldError
+                name="password"
+                className="rw-field-error bg-gray-200"
+              />
               <div className="mt-4 w-full bg-gray-200">
                 <Submit className="w-full rounded-lg bg-green py-2.5 text-xl font-bold text-white hover:bg-white hover:text-bole">
                   Sign up

@@ -1,11 +1,10 @@
+import type { DeleteAuditMutationVariables, FindAuditById } from 'types/graphql'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-import { timeTag,  } from 'src/lib/formatters'
-
-import type { DeleteAuditMutationVariables, FindAuditById } from 'types/graphql'
+import { timeTag } from 'src/lib/formatters'
 
 const DELETE_AUDIT_MUTATION = gql`
   mutation DeleteAuditMutation($id: String!) {
@@ -49,16 +48,20 @@ const Audit = ({ audit }: Props) => {
             <tr>
               <th>Id</th>
               <td>{audit.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(audit.createdAt)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Updated at</th>
               <td>{timeTag(audit.updatedAt)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>User id</th>
               <td>{audit.userId}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Log</th>
               <td>{audit.log}</td>
             </tr>

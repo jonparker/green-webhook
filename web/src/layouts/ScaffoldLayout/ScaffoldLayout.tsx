@@ -7,17 +7,12 @@ type LayoutProps = {
   children: React.ReactNode
 }
 
-const ScaffoldLayout = ({
-  buttonLabel,
-  buttonTo,
-  children,
-}: LayoutProps) => {
-
+const ScaffoldLayout = ({ buttonLabel, buttonTo, children }: LayoutProps) => {
   return (
     <>
       <Header />
-      <Navigation buttonLabel={buttonLabel} buttonTo={buttonTo}/>
-      <main className='flex items-center justify-center px-5'>{children}</main>
+      <Navigation buttonLabel={buttonLabel} buttonTo={buttonTo} />
+      <main className="flex items-center justify-center px-5">{children}</main>
     </>
   )
 }

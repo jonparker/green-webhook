@@ -42,11 +42,10 @@ const WebhookForm = (props: WebhookFormProps) => {
   )
 
   const onSubmit = (data: FormWebhook) => {
+    let hasEstimate = true
 
-    let hasEstimate = true;
-
-    console.log(typeof(data.estimatedTime))
-    if(data.estimatedTime === 0 || isNaN(data.estimatedTime)) {
+    console.log(typeof data.estimatedTime)
+    if (data.estimatedTime === 0 || isNaN(data.estimatedTime)) {
       hasEstimate = false
     }
 
@@ -61,7 +60,7 @@ const WebhookForm = (props: WebhookFormProps) => {
         isEnabled: true,
         isDeleted: false,
         isArchived: false,
-        hasEstimate
+        hasEstimate,
       },
       props?.webhook?.id
     )
@@ -167,9 +166,9 @@ const WebhookForm = (props: WebhookFormProps) => {
       <NumberField
         name="maxDelaySeconds"
         defaultValue={props.webhook?.maxDelaySeconds}
-        validation = {{
+        validation={{
           min: 0,
-          max: 86399
+          max: 86399,
         }}
         className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
         errorClassName="rw-input rw-input-error"
@@ -185,9 +184,9 @@ const WebhookForm = (props: WebhookFormProps) => {
       <NumberField
         name="estimatedTime"
         defaultValue={props.webhook?.estimatedTime}
-        validation = {{
+        validation={{
           min: 0,
-          max: 86399
+          max: 86399,
         }}
         className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
         errorClassName="rw-input rw-input-error"

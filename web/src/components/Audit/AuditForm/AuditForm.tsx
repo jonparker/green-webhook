@@ -1,3 +1,5 @@
+import type { EditAuditById, UpdateAuditInput } from 'types/graphql'
+
 import {
   Form,
   FormError,
@@ -6,8 +8,6 @@ import {
   TextField,
   Submit,
 } from '@redwoodjs/forms'
-
-import type { EditAuditById, UpdateAuditInput } from 'types/graphql'
 import type { RWGqlError } from '@redwoodjs/forms'
 
 type FormAudit = NonNullable<EditAuditById['audit']>
@@ -70,7 +70,7 @@ const AuditForm = (props: AuditFormProps) => {
 
         <FieldError name="log" className="rw-field-error bg-gray-200" />
 
-        <div className='bg-gray-200'>
+        <div className="bg-gray-200">
           <Submit disabled={props.loading} className="rw-button rw-button-blue">
             Save
           </Submit>

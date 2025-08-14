@@ -1,3 +1,5 @@
+import type { EditUserById, UpdateUserInput } from 'types/graphql'
+
 import {
   Form,
   FormError,
@@ -7,18 +9,13 @@ import {
   DatetimeLocalField,
   Submit,
 } from '@redwoodjs/forms'
-
-import type { EditUserById, UpdateUserInput } from 'types/graphql'
 import type { RWGqlError } from '@redwoodjs/forms'
-
-
 
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\d{2}\.\d{3}\w/, '')
   }
 }
-
 
 type FormUser = NonNullable<EditUserById['user']>
 
@@ -31,25 +28,6 @@ interface UserFormProps {
 
 const UserForm = (props: UserFormProps) => {
   const onSubmit = (data: FormUser) => {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     props.onSave(data, props?.user?.id)
   }
 
@@ -71,13 +49,12 @@ const UserForm = (props: UserFormProps) => {
           Name
         </Label>
 
-          <TextField
-            name="name"
-            defaultValue={props.user?.name}
-            className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none text-gray-600"
-            errorClassName="rw-input rw-input-error bg-gray-200"
-          />
-
+        <TextField
+          name="name"
+          defaultValue={props.user?.name}
+          className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
+          errorClassName="rw-input rw-input-error bg-gray-200"
+        />
 
         <FieldError name="name" className="rw-field-error bg-gray-200" />
 
@@ -89,14 +66,13 @@ const UserForm = (props: UserFormProps) => {
           Email
         </Label>
 
-          <TextField
-            name="email"
-            defaultValue={props.user?.email}
-            className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none text-gray-600"
-            errorClassName="rw-input rw-input-error bg-gray-200"
-            validation={{ required: true }}
-          />
-
+        <TextField
+          name="email"
+          defaultValue={props.user?.email}
+          className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
+          errorClassName="rw-input rw-input-error bg-gray-200"
+          validation={{ required: true }}
+        />
 
         <FieldError name="email" className="rw-field-error bg-gray-200" />
 
@@ -108,16 +84,18 @@ const UserForm = (props: UserFormProps) => {
           Hashed password
         </Label>
 
-          <TextField
-            name="hashedPassword"
-            defaultValue={props.user?.hashedPassword}
-            className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none text-gray-600"
-            errorClassName="rw-input rw-input-error bg-gray-200"
-            validation={{ required: true }}
-          />
+        <TextField
+          name="hashedPassword"
+          defaultValue={props.user?.hashedPassword}
+          className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
+          errorClassName="rw-input rw-input-error bg-gray-200"
+          validation={{ required: true }}
+        />
 
-
-        <FieldError name="hashedPassword" className="rw-field-error bg-gray-200" />
+        <FieldError
+          name="hashedPassword"
+          className="rw-field-error bg-gray-200"
+        />
 
         <Label
           name="salt"
@@ -127,14 +105,13 @@ const UserForm = (props: UserFormProps) => {
           Salt
         </Label>
 
-          <TextField
-            name="salt"
-            defaultValue={props.user?.salt}
-            className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none text-gray-600"
-            errorClassName="rw-input rw-input-error bg-gray-200"
-            validation={{ required: true }}
-          />
-
+        <TextField
+          name="salt"
+          defaultValue={props.user?.salt}
+          className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
+          errorClassName="rw-input rw-input-error bg-gray-200"
+          validation={{ required: true }}
+        />
 
         <FieldError name="salt" className="rw-field-error bg-gray-200" />
 
@@ -146,13 +123,12 @@ const UserForm = (props: UserFormProps) => {
           Reset token
         </Label>
 
-          <TextField
-            name="resetToken"
-            defaultValue={props.user?.resetToken}
-            className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none text-gray-600"
-            errorClassName="rw-input rw-input-error bg-gray-200"
-          />
-
+        <TextField
+          name="resetToken"
+          defaultValue={props.user?.resetToken}
+          className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
+          errorClassName="rw-input rw-input-error bg-gray-200"
+        />
 
         <FieldError name="resetToken" className="rw-field-error bg-gray-200" />
 
@@ -164,21 +140,20 @@ const UserForm = (props: UserFormProps) => {
           Reset token expires at
         </Label>
 
-          <DatetimeLocalField
-            name="resetTokenExpiresAt"
-            defaultValue={formatDatetime(props.user?.resetTokenExpiresAt)}
-            className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 focus:bg-white focus:shadow focus:outline-none text-gray-600"
-            errorClassName="rw-input rw-input-error bg-gray-200"
-          />
+        <DatetimeLocalField
+          name="resetTokenExpiresAt"
+          defaultValue={formatDatetime(props.user?.resetTokenExpiresAt)}
+          className="mt-2 w-full rounded-lg bg-gray-100 py-2.5 px-4 text-gray-600 focus:bg-white focus:shadow focus:outline-none"
+          errorClassName="rw-input rw-input-error bg-gray-200"
+        />
 
+        <FieldError
+          name="resetTokenExpiresAt"
+          className="rw-field-error bg-gray-200"
+        />
 
-        <FieldError name="resetTokenExpiresAt" className="rw-field-error bg-gray-200" />
-
-        <div className='bg-gray-200'>
-          <Submit
-            disabled={props.loading}
-            className="rw-button rw-button-blue"
-          >
+        <div className="bg-gray-200">
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
             Save
           </Submit>
         </div>

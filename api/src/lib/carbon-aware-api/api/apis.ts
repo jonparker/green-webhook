@@ -1,14 +1,19 @@
-export * from './carbonAwareApi';
-import { CarbonAwareApi } from './carbonAwareApi';
-import * as http from 'http';
+export * from './carbonAwareApi'
+import * as http from 'http'
+
+import { CarbonAwareApi } from './carbonAwareApi'
 
 export class HttpError extends Error {
-    constructor (public response: http.IncomingMessage, public body: any, public statusCode?: number) {
-        super('HTTP request failed');
-        this.name = 'HttpError';
-    }
+  constructor(
+    public response: http.IncomingMessage,
+    public body: any,
+    public statusCode?: number
+  ) {
+    super('HTTP request failed')
+    this.name = 'HttpError'
+  }
 }
 
-export { RequestFile } from '../model/models';
+export { RequestFile } from '../model/models'
 
-export const APIS = [CarbonAwareApi];
+export const APIS = [CarbonAwareApi]
