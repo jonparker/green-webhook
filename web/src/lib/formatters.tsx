@@ -36,11 +36,7 @@ export const timeTag = (dateTime?: string) => {
 
   if (dateTime) {
     output = (
-      <time
-        dateTime={dateTime}
-        title={dateTime}
-        className="bg-transparent text-black"
-      >
+      <time dateTime={dateTime} title={dateTime} className="bg-transparent text-black">
         {new Date(dateTime).toUTCString()}
       </time>
     )

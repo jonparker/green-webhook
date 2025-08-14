@@ -10,7 +10,6 @@
 import { Private, Router, Route, Set } from '@redwoodjs/router'
 
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
-
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout'
 
 const Routes = () => {
@@ -42,7 +41,7 @@ const Routes = () => {
           <Route path="/webhooks" page={WebhookWebhooksPage} name="webhooks" />
         </Set>
       </Private>
-      <Set wrap={DefaultLayout}>
+      <Set wrap={DefaultLayout} >
         <Route path="/about" page={AboutPage} name="about" />
         <Route path="/" page={HomePage} name="home" />
       </Set>

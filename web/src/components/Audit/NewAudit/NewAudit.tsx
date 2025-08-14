@@ -1,10 +1,10 @@
-import type { CreateAuditInput } from 'types/graphql'
-
 import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import AuditForm from 'src/components/Audit/AuditForm'
+
+import type { CreateAuditInput } from 'types/graphql'
 
 const CREATE_AUDIT_MUTATION = gql`
   mutation CreateAuditMutation($input: CreateAuditInput!) {
@@ -15,15 +15,18 @@ const CREATE_AUDIT_MUTATION = gql`
 `
 
 const NewAudit = () => {
-  const [createAudit, { loading, error }] = useMutation(CREATE_AUDIT_MUTATION, {
-    onCompleted: () => {
-      toast.success('Audit created')
-      navigate(routes.audits())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [createAudit, { loading, error }] = useMutation(
+    CREATE_AUDIT_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Audit created')
+        navigate(routes.audits())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
   const onSave = (input: CreateAuditInput) => {
     createAudit({ variables: { input } })

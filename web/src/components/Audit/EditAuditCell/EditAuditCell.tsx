@@ -37,15 +37,18 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 export const Success = ({ audit }: CellSuccessProps<EditAuditById>) => {
-  const [updateAudit, { loading, error }] = useMutation(UPDATE_AUDIT_MUTATION, {
-    onCompleted: () => {
-      toast.success('Audit updated')
-      navigate(routes.audits())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [updateAudit, { loading, error }] = useMutation(
+    UPDATE_AUDIT_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Audit updated')
+        navigate(routes.audits())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
   const onSave = (
     input: UpdateAuditInput,
@@ -57,17 +60,10 @@ export const Success = ({ audit }: CellSuccessProps<EditAuditById>) => {
   return (
     <div className="rw-segment">
       <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">
-          Edit Audit {audit?.id}
-        </h2>
+        <h2 className="rw-heading rw-heading-secondary">Edit Audit {audit?.id}</h2>
       </header>
       <div className="rw-segment-main">
-        <AuditForm
-          audit={audit}
-          onSave={onSave}
-          error={error}
-          loading={loading}
-        />
+        <AuditForm audit={audit} onSave={onSave} error={error} loading={loading} />
       </div>
     </div>
   )

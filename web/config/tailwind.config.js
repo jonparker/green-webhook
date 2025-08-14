@@ -6,9 +6,9 @@ module.exports = {
       colors: {
         green: '#8bc53f',
         black: '#121212',
-        bole: '#774936',
-      },
-    },
+        bole: '#774936'
+      }
+    }
   },
-  plugins: [],
+  plugins: []
 }
