@@ -24,7 +24,9 @@
   },
   "packageManager": "yarn@3.2.3",
   "dependencies": {
+    "@prisma/client": "^4.16.0",
     "node-cache": "^5.1.2",
+    "prisma": "^4.16.0",
     "request": "^2.88.2"
   }
 }
