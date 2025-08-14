@@ -1,6 +1,9 @@
 datasource db {
   provider = "postgresql"
   url = env("DATABASE_URL")
+  // directUrl is now available with Prisma 4.16+ for Supabase migrations
+  // Uncomment and configure as needed:
+  // directUrl = env("DIRECT_DATABASE_URL")
 }
 
 generator client {
